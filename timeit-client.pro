@@ -1,6 +1,7 @@
-QT += quick
+QT += quick \
+    widgets
 
-CONFIG += c++11
+CONFIG += c++11 x11 windows
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -14,7 +15,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        main.cpp
+        app.cpp \
+        main.cpp \
+        platform/linux_x11/linux_system.cpp \
+        platform/windows/windows_system.cpp
 
 RESOURCES += qml.qrc
 
@@ -31,3 +35,9 @@ QML_DESIGNER_IMPORT_PATH =
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+HEADERS += \
+    app.h \
+    platform/system.h \
+    platform/linux_x11/linux_system.h \
+    platform/windows/windows_system.h
