@@ -18,8 +18,8 @@ WindowsSystem::WindowProps WindowsSystem::getCurrentFocusedWindow()
 {
     HWND hwnd = GetForegroundWindow();
 
-    char windowName[200];
-    GetWindowTextA(hwnd, windowName, 200);
+    wchar_t windowName[200];
+    GetWindowTextW(hwnd, windowName, 200);
 
     DWORD windowPid;
     GetWindowThreadProcessId(hwnd, &windowPid);
@@ -30,14 +30,14 @@ WindowsSystem::WindowProps WindowsSystem::getCurrentFocusedWindow()
                 windowPid
     );
 
-    char windowProcess[200];
-    GetModuleFileNameExA(handle, NULL, windowProcess, 200);
+    wchar_t windowProcess[200];
+    GetModuleFileNameEx(handle, NULL, windowProcess, 200);
 
     CloseHandle(handle);
 
     return WindowProps{
-        QString::fromUtf8(windowName),
-        QString::fromUtf8(windowProcess),
+        QString::fromWCharArray(windowName),
+        QString::fromWCharArray(windowProcess),
         (qint16) windowPid
     };
 }
