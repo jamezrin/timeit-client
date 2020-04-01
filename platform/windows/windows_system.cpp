@@ -1,9 +1,5 @@
 #include "windows_system.h"
 
-#include <iostream>
-#include <psapi.h>
-#include <stdlib.h>
-
 WindowsSystem::WindowsSystem()
 {
     qInfo() << "Sistema inicializado para Windows";

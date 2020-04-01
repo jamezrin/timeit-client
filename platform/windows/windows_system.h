@@ -2,7 +2,11 @@
 #define WINDOWS_SYSTEM_H
 
 #include "../system.h"
+
 #include <Windows.h>
+#include <iostream>
+#include <psapi.h>
+#include <stdlib.h>
 
 class WindowsSystem : public ISystem
 {
