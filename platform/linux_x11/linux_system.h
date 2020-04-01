@@ -2,8 +2,6 @@
 #define LINUX_SYSTEM_H
 
 #include "../system.h"
-
-#include <QDebug>
 #include <X11/Xlib.h>
 
 class LinuxSystem : public ISystem

@@ -2,6 +2,7 @@
 #define ISYSTEM_H
 
 #include <QString>
+#include <QDebug>
 
 class ISystem {
 public:

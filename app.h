@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QWidget>
 #include <QTimer>
+#include <QDebug>
 
 class App : public QObject
 {

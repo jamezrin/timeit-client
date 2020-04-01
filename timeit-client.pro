@@ -1,7 +1,7 @@
 QT += quick \
     widgets
 
-CONFIG += c++11 x11 windows
+CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -16,9 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         app.cpp \
-        main.cpp \
-        platform/linux_x11/linux_system.cpp \
-        platform/windows/windows_system.cpp
+        main.cpp
 
 RESOURCES += qml.qrc
 
@@ -38,6 +36,17 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     app.h \
-    platform/system.h \
-    platform/linux_x11/linux_system.h \
-    platform/windows/windows_system.h
+    platform/system.h
+
+win32 {
+    CONFIG += windows
+    HEADERS += platform/windows/windows_system.h
+    SOURCES += platform/windows/windows_system.cpp
+    LIBS += -lpsapi
+}
+
+unix {
+    CONFIG += x11
+    HEADERS += platform/linux_x11/linux_system.h
+    SOURCES += platform/linux_x11/linux_system.cpp
+}

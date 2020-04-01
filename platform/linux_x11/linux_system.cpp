@@ -13,6 +13,8 @@ LinuxSystem::LinuxSystem()
                 << "Unable to open display "
                 << XDisplayName(display_name);
     }
+
+    qInfo() << "Sistema inicializado para Linux";
 }
 
 LinuxSystem::~LinuxSystem()
@@ -72,3 +74,4 @@ LinuxSystem::WindowProps LinuxSystem::getCurrentFocusedWindow()
         (qint16) getLongProperty("_NET_WM_PID")
     };
 }
+
