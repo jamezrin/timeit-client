@@ -1,5 +1,7 @@
 #include "app.h"
 
+#include "platform/system.h"
+
 #if defined(Q_OS_LINUX)
     #include "platform/linux_x11/linux_system.h"
 #elif defined(Q_OS_WIN)
@@ -13,7 +15,7 @@ ISystem* getSystemApi()
 #elif defined(Q_OS_WIN)
     return new WindowsSystem();
 #else
-    return nullptr;
+    #error "Plataforma no soportada"
 #endif
 }
 
