@@ -1,3 +1,7 @@
+#include <QtGlobal>
+
+#if defined(Q_OS_LINUX)
+
 #include "linux_system.h"
 
 Display *display;
@@ -75,3 +79,4 @@ LinuxSystem::WindowProps LinuxSystem::getCurrentFocusedWindow()
     };
 }
 
+#endif // only for Q_OS_LINUX

@@ -1,4 +1,7 @@
-#ifndef LINUX_SYSTEM_H
+#include <QtGlobal>
+
+#if defined(Q_OS_LINUX) && !defined(LINUX_SYSTEM_H)
+
 #define LINUX_SYSTEM_H
 
 #include "../system.h"
@@ -18,4 +21,5 @@ private:
     unsigned long getLongProperty(const char* propertyName);
 };
 
-#endif // LINUX_SYSTEM_H
+#endif // only for Q_OS_LINUX and LINUX_SYSTEM_H guard
+

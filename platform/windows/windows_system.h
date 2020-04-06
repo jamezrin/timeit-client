@@ -1,4 +1,7 @@
-#ifndef WINDOWS_SYSTEM_H
+#include <QtGlobal>
+
+#if defined(Q_OS_WIN32) && !defined(WINDOWS_SYSTEM_H)
+
 #define WINDOWS_SYSTEM_H
 
 #include "../system.h"
@@ -17,4 +20,4 @@ public:
     virtual WindowProps getCurrentFocusedWindow();
 };
 
-#endif // WINDOWS_SYSTEM_H
+#endif // only for Q_OS_WIN32 and WINDOWS_SYSTEM_H guard

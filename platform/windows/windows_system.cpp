@@ -1,3 +1,7 @@
+#include <QtGlobal>
+
+#if defined(Q_OS_WIN32)
+
 #include "windows_system.h"
 
 WindowsSystem::WindowsSystem()
@@ -37,3 +41,5 @@ WindowsSystem::WindowProps WindowsSystem::getCurrentFocusedWindow()
         (qint16) windowPid
     };
 }
+
+#endif // only for Q_OS_WIN32
