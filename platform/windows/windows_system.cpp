@@ -38,7 +38,7 @@ WindowsSystem::WindowProps WindowsSystem::getCurrentFocusedWindow()
     return WindowProps{
         QString::fromWCharArray(windowName),
         QString::fromWCharArray(windowProcess),
-        (qint16) windowPid
+        (quint64) windowPid
     };
 }
 

@@ -75,7 +75,7 @@ LinuxSystem::WindowProps LinuxSystem::getCurrentFocusedWindow()
     return WindowProps{
         QString::fromUtf8((char*) getStringProperty("_NET_WM_NAME")),
         QString::fromUtf8((char*) getStringProperty("WM_CLASS")),
-        (qint16) getLongProperty("_NET_WM_PID")
+        (quint64) getLongProperty("_NET_WM_PID")
     };
 }
 

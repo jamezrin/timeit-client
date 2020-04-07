@@ -9,7 +9,7 @@ public:
     struct WindowProps {
         QString windowName;
         QString windowClass;
-        qint16 windowPid;
+        quint64 windowPid;
     };
 
     virtual WindowProps getCurrentFocusedWindow() = 0;
