@@ -5,6 +5,11 @@
 #include <QWidget>
 #include <QTimer>
 #include <QDebug>
+#include <QNetworkAccessManager>
+#include <QHttpMultiPart>
+#include <QNetworkReply>
+#include <QVariant>
+#include <QNetworkCookie>
 
 class App : public QObject
 {

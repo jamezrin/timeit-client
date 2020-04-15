@@ -20,10 +20,12 @@ ISystem* getSystemApi()
 }
 
 ISystem* systemApi;
+QNetworkAccessManager* manager;
 
 App::App()
 {
     systemApi = getSystemApi();
+    manager = new QNetworkAccessManager(this);
 
     QTimer* timer = new QTimer(this);
 
@@ -36,6 +38,27 @@ App::App()
 
 void App::printWindow()
 {
+    QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::ContentType::FormDataType);
+    QNetworkReply *reply = manager->post(QNetworkRequest(QUrl("http://localhost:7001/set-cookie")), multiPart);
+    connect(reply, &QNetworkReply::finished, [=]() {
+        if(reply->error() == QNetworkReply::NoError)
+        {
+            // https://doc.qt.io/qt-5/qnetworkcookiejar.html
+            //qDebug() << reply->manager()->cookieJar();
+            QVariant variant = reply->header(QNetworkRequest::KnownHeaders::SetCookieHeader);
+            for (QNetworkCookie cookie : variant.value<QList<QNetworkCookie>>())
+            {
+                qDebug() << cookie;
+            }
+            QByteArray response = reply->readAll();
+            qDebug() << response;
+        }
+        else
+        {
+            qDebug() << reply->errorString();
+        }
+    });
+
     ISystem::WindowProps currentWindow = systemApi->getCurrentFocusedWindow();
     qDebug() << currentWindow.windowName
              << " " << currentWindow.windowClass
