@@ -91,10 +91,4 @@ Window {
 
 
 
-/*##^##
-Designer {
-    D{i:1;anchors_height:148;anchors_width:500;anchors_x:0;anchors_y:0}D{i:2;anchors_height:271;anchors_width:145;anchors_x:0;anchors_y:154}
-D{i:3;anchors_height:271;anchors_width:145;anchors_x:355;anchors_y:154}D{i:5;anchors_x:150;anchors_y:108}
-D{i:4;anchors_height:282;anchors_width:500;anchors_x:0;anchors_y:418}
-}
-##^##*/
+

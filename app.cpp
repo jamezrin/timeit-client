@@ -41,6 +41,8 @@ App::App()
     networkManager->setProxy(proxy);
     networkManager->setCookieJar(new PersistentCookieJar(networkManager));
 
+    qDebug() << "Compiled targetting backend: " TIMEIT_BACKEND_URL;
+
     checkCurrentUser();
 
     QTimer* timer = new QTimer(this);

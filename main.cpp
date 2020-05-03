@@ -22,12 +22,10 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
     engine.load(url);
 
-    int returnCode = app.exec();
-    qDebug() << "Aplication is exiting...";
+    const int returnCode = app.exec();
 
-    QNetworkCookieJar *cookieJar = controller->networkManager->cookieJar();
-    PersistentCookieJar *persistentCookieJar = dynamic_cast<PersistentCookieJar*>(cookieJar);
-    persistentCookieJar->save();
+    // Destructor saves the PersistentCookieJar
+    delete controller->networkManager->cookieJar();
 
     return returnCode;
 }

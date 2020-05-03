@@ -38,12 +38,6 @@ CONFIG(release, debug|release) {
     DEFINES += TIMEIT_BACKEND_URL=\\\"https://example.org/api\\\"
 }
 
-#ifdef QT_DEBUG
-#define TIMEIT_BACKEND_URL "http://localhost:7001"
-#else
-#define TIMEIT_BACKEND_URL "https://example.org"
-#endif
-
 HEADERS += \
     app.h \
     persistent_cookie_jar.h \

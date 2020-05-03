@@ -5,8 +5,6 @@
 #include <QNetworkCookie>
 #include <QNetworkCookieJar>
 #include <QSettings>
-#include <QObject>
-#include <QDebug>
 
 class PersistentCookieJar : public QNetworkCookieJar {
 public:
