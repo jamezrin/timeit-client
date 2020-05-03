@@ -11,12 +11,19 @@
 #include <QVariant>
 #include <QNetworkCookie>
 
+#include <platform/system.h>
+
 class App : public QObject
 {
     Q_OBJECT
 public:
     App();
 
+    void checkCurrentUser();
+    void authenticateUser();
+
+    mutable ISystem* systemApi;
+    mutable QNetworkAccessManager* networkManager;
 public slots:
     void printWindow();
 };

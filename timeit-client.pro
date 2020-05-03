@@ -30,8 +30,23 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
+CONFIG(debug, debug|release) {
+    DEFINES += TIMEIT_BACKEND_URL=\\\"http://192.168.0.4:7001/api\\\"
+}
+
+CONFIG(release, debug|release) {
+    DEFINES += TIMEIT_BACKEND_URL=\\\"https://example.org/api\\\"
+}
+
+#ifdef QT_DEBUG
+#define TIMEIT_BACKEND_URL "http://localhost:7001"
+#else
+#define TIMEIT_BACKEND_URL "https://example.org"
+#endif
+
 HEADERS += \
     app.h \
+    persistent_cookie_jar.h \
     platform/system.h \
     platform/linux_x11/linux_system.h \
     platform/windows/windows_system.h
@@ -39,6 +54,7 @@ HEADERS += \
 SOURCES += \
     app.cpp \
     main.cpp \
+    persistent_cookie_jar.cpp \
     platform/linux_x11/linux_system.cpp \
     platform/windows/windows_system.cpp
 
@@ -50,3 +66,4 @@ win32 {
 unix {
     CONFIG += x11
 }
+

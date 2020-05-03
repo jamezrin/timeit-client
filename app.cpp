@@ -1,5 +1,6 @@
 #include "app.h"
 
+#include "persistent_cookie_jar.h"
 #include "platform/system.h"
 
 #if defined(Q_OS_LINUX)
@@ -19,13 +20,28 @@ ISystem* getSystemApi()
 #endif
 }
 
-ISystem* systemApi;
-QNetworkAccessManager* manager;
+#include <QNetworkCookieJar>
+#include <QMutexLocker>
+#include <QSettings>
+#include <QNetworkProxy>
+#include <QUrlQuery>
+#include <QNetworkConfiguration>
 
 App::App()
 {
     systemApi = getSystemApi();
-    manager = new QNetworkAccessManager(this);
+    networkManager = new QNetworkAccessManager(this);
+
+    QNetworkProxy proxy;
+    proxy.setType(QNetworkProxy::HttpProxy);
+    proxy.setHostName("localhost");
+    proxy.setPort(8000);
+    QNetworkProxy::setApplicationProxy(proxy);
+
+    networkManager->setProxy(proxy);
+    networkManager->setCookieJar(new PersistentCookieJar(networkManager));
+
+    checkCurrentUser();
 
     QTimer* timer = new QTimer(this);
 
@@ -36,29 +52,62 @@ App::App()
     timer->start(500);
 }
 
-void App::printWindow()
+ void App::authenticateUser()
+ {
+     qDebug() << "Authenticating user...";
+
+     QUrlQuery formData;
+     formData.addQueryItem("emailAddress", "jaime43@jamezrin.name");
+     formData.addQueryItem("password", "superpass");
+
+     QNetworkRequest request(QUrl(TIMEIT_BACKEND_URL "/authenticate"));
+     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+     request.setAttribute(QNetworkRequest::CookieSaveControlAttribute, QNetworkRequest::Automatic);
+     QNetworkReply *reply = networkManager->post(request, formData.toString(QUrl::FullyEncoded).toUtf8());
+
+     connect(reply, &QNetworkReply::finished, [=]() {
+         if(reply->error() == QNetworkReply::NoError)
+         {
+             QByteArray response = reply->readAll();
+             qDebug() << response;
+
+             qDebug() << "Authenticated the user, checking current user again...";
+             checkCurrentUser();
+         }
+         else
+         {
+             qDebug() << "Error when authenticating " << reply->error();
+         }
+     });
+ }
+
+void App::checkCurrentUser()
 {
-    QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::ContentType::FormDataType);
-    QNetworkReply *reply = manager->post(QNetworkRequest(QUrl("http://localhost:7001/set-cookie")), multiPart);
+    QNetworkRequest request(QUrl(TIMEIT_BACKEND_URL "/current-user"));
+    request.setAttribute(QNetworkRequest::CookieLoadControlAttribute, QNetworkRequest::Automatic);
+    QNetworkReply *reply = networkManager->get(request);
     connect(reply, &QNetworkReply::finished, [=]() {
         if(reply->error() == QNetworkReply::NoError)
         {
-            // https://doc.qt.io/qt-5/qnetworkcookiejar.html
-            //qDebug() << reply->manager()->cookieJar();
-            QVariant variant = reply->header(QNetworkRequest::KnownHeaders::SetCookieHeader);
-            for (QNetworkCookie cookie : variant.value<QList<QNetworkCookie>>())
-            {
-                qDebug() << cookie;
-            }
+            qDebug() << "User is logged in!";
+
             QByteArray response = reply->readAll();
             qDebug() << response;
         }
+        else if (reply->error() == QNetworkReply::AuthenticationRequiredError)
+        {
+            qDebug() << "User is not authenticated, authenticating...";
+            authenticateUser();
+        }
         else
         {
-            qDebug() << reply->errorString();
+            qDebug() << "Different error " << reply->error();
         }
     });
+}
 
+void App::printWindow()
+{
     ISystem::WindowProps currentWindow = systemApi->getCurrentFocusedWindow();
     qDebug() << currentWindow.windowName
              << " " << currentWindow.windowClass
