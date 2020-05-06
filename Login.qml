@@ -4,8 +4,8 @@ import QtQuick.Controls 2.5
 Page {
     id: loginPage
     width: 360
-    title: qsTr("Inicio de Sesión")
     height: 450
+    title: qsTr("Inicio de Sesión")
 
     // https://chakra-ui.com/theme
     property string _textColor: "#A0AEC0"
@@ -16,6 +16,8 @@ Page {
     property string _darkBlueColor: "#4299E1"
     property string _redColor: "#E53E3E"
 
+    Component.onCompleted: mainWindow.resizeTo(this)
+
     background: Rectangle {
         color: _bgColor
     }
@@ -23,19 +25,18 @@ Page {
     Label {
         id: incorrectDetailsText
         width: 308
-        height: 10
+        height: 24
         color: _redColor
         text: qsTr("Tu correo o contraseña son incorrectos")
-        anchors.bottom: emailTextField.top
-        anchors.bottomMargin: 20
         anchors.top: parent.top
-        anchors.topMargin: 163
-        anchors.left: parent.left
-        anchors.leftMargin: 26
+        anchors.topMargin: 151
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 275
         anchors.right: parent.right
         anchors.rightMargin: 26
+        anchors.left: parent.left
+        anchors.leftMargin: 26
         horizontalAlignment: Text.AlignHCenter
-
         Component.onCompleted: visible = false
     }
 
@@ -51,6 +52,7 @@ Page {
         anchors.leftMargin: 26
         placeholderText: qsTr("Correo electrónico")
         font.pointSize: 14
+        selectByMouse: true
         background: Rectangle {
             color: _whiteColor
             radius: 5
@@ -71,6 +73,7 @@ Page {
         placeholderText: qsTr("Contraseña")
         echoMode: TextField.Password
         font.pointSize: 14
+        selectByMouse: true
         background: Rectangle {
             color: _whiteColor
             radius: 5
@@ -120,6 +123,7 @@ Page {
 
         onClicked: {
             if (true) {
+                stackView.push("ProjectList.qml")
                 incorrectDetailsText.visible = true
             } else {
 
@@ -151,30 +155,22 @@ Page {
             horizontalAlignment: Text.AlignHCenter
             font.pixelSize: 12
 
-
             MouseArea {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
                 anchors.top: parent.top
-
                 anchors.leftMargin:  0
                 anchors.rightMargin: 0
                 anchors.bottomMargin: -10
                 anchors.topMargin: -10
-
                 anchors.fill: parent
 
+
                 hoverEnabled: true
+                onHoveredChanged: parent.font.underline = containsMouse
+                onClicked: Qt.openUrlExternally(TIMEIT_FRONTEND_URL)
                 cursorShape: Qt.PointingHandCursor
-
-                onHoveredChanged: {
-                    parent.font.underline = containsMouse
-                }
-
-                onClicked: {
-                    console.log("Hola")
-                }
             }
         }
     }
@@ -201,7 +197,7 @@ Page {
         id: mottoText
         width: 308
         color: _blueColor
-        text: qsTr("Inicia sesion para empezar a controlar tu tiempo")
+        text: qsTr("Inicia sesión para empezar a controlar tu tiempo")
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 305
         verticalAlignment: Text.AlignTop
@@ -210,9 +206,9 @@ Page {
         anchors.top: parent.top
         anchors.topMargin: 95
         anchors.right: parent.right
-        anchors.rightMargin: 62
+        anchors.rightMargin: 59
         anchors.left: parent.left
-        anchors.leftMargin: 62
+        anchors.leftMargin: 59
         horizontalAlignment: Text.AlignHCenter
     }
 }
@@ -221,7 +217,7 @@ Page {
 
 /*##^##
 Designer {
-    D{i:4;anchors_height:50;anchors_x:26;anchors_y:271}D{i:3;anchors_height:50;anchors_x:26;anchors_y:183}
-D{i:5;anchors_height:50;anchors_x:26;anchors_y:245}
+    D{i:2;anchors_x:26;anchors_y:151}D{i:4;anchors_height:50;anchors_x:26;anchors_y:271}
+D{i:3;anchors_height:50;anchors_x:26;anchors_y:183}D{i:5;anchors_height:50;anchors_x:26;anchors_y:245}
 }
 ##^##*/

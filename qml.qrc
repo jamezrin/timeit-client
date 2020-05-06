@@ -6,5 +6,7 @@
         <file>cover.png</file>
         <file>default.svg</file>
         <file>default-monochrome.svg</file>
+        <file>ProjectList.qml</file>
+        <file>Session.qml</file>
     </qresource>
 </RCC>

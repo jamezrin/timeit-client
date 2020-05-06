@@ -1,6 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QDebug>
+#include <QQmlContext>
 
 #include "app.h"
 #include "persistent_cookie_jar.h"
@@ -21,6 +22,9 @@ int main(int argc, char *argv[])
         QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
     engine.load(url);
+
+    engine.rootContext()->setContextProperty("TIMEIT_FRONTEND_URL", TIMEIT_FRONTEND_URL);
+    engine.rootContext()->setContextProperty("TIMEIT_BACKEND_URL", TIMEIT_BACKEND_URL);
 
     const int returnCode = app.exec();
 

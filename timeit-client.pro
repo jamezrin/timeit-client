@@ -32,10 +32,12 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 CONFIG(debug, debug|release) {
     DEFINES += TIMEIT_BACKEND_URL=\\\"http://192.168.0.4:7001/api\\\"
+    DEFINES += TIMEIT_FRONTEND_URL=\\\"http://192.168.0.4:3000\\\"
 }
 
 CONFIG(release, debug|release) {
     DEFINES += TIMEIT_BACKEND_URL=\\\"https://example.org/api\\\"
+    DEFINES += TIMEIT_FRONTEND_URL=\\\"https://example.org\\\"
 }
 
 HEADERS += \

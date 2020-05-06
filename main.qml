@@ -13,13 +13,14 @@ Window {
     property string _whiteColor: "#F7FAFC"
     property string _blueColor: "#63B3ED"
 
-    height: 450
-    width: 360
+    function resizeTo(object) {
+        minimumHeight = object.height
+        minimumWidth = object.width
 
-    minimumHeight: height
-    maximumHeight: height
-    minimumWidth: width
-    maximumWidth: width
+        // disable window resize
+        maximumHeight = object.height
+        maximumWidth = object.width
+    }
 
     title: qsTr("Cliente de TimeIt")
 
@@ -35,3 +36,9 @@ Window {
 
 
 
+
+/*##^##
+Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+##^##*/

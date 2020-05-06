@@ -41,7 +41,8 @@ App::App()
     networkManager->setProxy(proxy);
     networkManager->setCookieJar(new PersistentCookieJar(networkManager));
 
-    qDebug() << "Compiled targetting backend: " TIMEIT_BACKEND_URL;
+    qDebug() << "Targetting backend at " TIMEIT_BACKEND_URL << " and "
+             << "targetting frontend at " TIMEIT_FRONTEND_URL;
 
     checkCurrentUser();
 
