@@ -8,11 +8,6 @@ Window {
     id: mainWindow
     visible: true
 
-    property string _textColor: "#A0AEC0"
-    property string _bgColor: "#E2E8F0"
-    property string _whiteColor: "#F7FAFC"
-    property string _blueColor: "#63B3ED"
-
     function resizeTo(object) {
         minimumHeight = object.height
         minimumWidth = object.width
@@ -32,10 +27,6 @@ Window {
         anchors.fill: parent
     }
 }
-
-
-
-
 
 /*##^##
 Designer {

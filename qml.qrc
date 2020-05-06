@@ -8,5 +8,6 @@
         <file>default-monochrome.svg</file>
         <file>ProjectList.qml</file>
         <file>Session.qml</file>
+        <file>Styles.js</file>
     </qresource>
 </RCC>

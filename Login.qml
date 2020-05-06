@@ -1,5 +1,6 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.5
+import "Styles.js" as Styles
 
 Page {
     id: loginPage
@@ -7,26 +8,17 @@ Page {
     height: 450
     title: qsTr("Inicio de Sesión")
 
-    // https://chakra-ui.com/theme
-    property string _textColor: "#A0AEC0"
-    property string _bgColor: "#E2E8F0"
-    property string _whiteColor: "#F7FAFC"
-    property string _blueColor: "#63B3ED"
-    property string _lightBlueColor: "#90CDF4"
-    property string _darkBlueColor: "#4299E1"
-    property string _redColor: "#E53E3E"
-
     Component.onCompleted: mainWindow.resizeTo(this)
 
     background: Rectangle {
-        color: _bgColor
+        color: Styles._bgColor
     }
 
     Label {
         id: incorrectDetailsText
         width: 308
         height: 24
-        color: _redColor
+        color: Styles._redColor
         text: qsTr("Tu correo o contraseña son incorrectos")
         anchors.top: parent.top
         anchors.topMargin: 151
@@ -54,7 +46,7 @@ Page {
         font.pointSize: 14
         selectByMouse: true
         background: Rectangle {
-            color: _whiteColor
+            color: Styles._whiteColor
             radius: 5
         }
     }
@@ -75,7 +67,7 @@ Page {
         font.pointSize: 14
         selectByMouse: true
         background: Rectangle {
-            color: _whiteColor
+            color: Styles._whiteColor
             radius: 5
         }
     }
@@ -85,11 +77,13 @@ Page {
         width: 270
         height: 37
         text: qsTr("Iniciar sesión")
+        checkable: false
+        display: AbstractButton.TextBesideIcon
         font.pixelSize: 20
 
         background: Rectangle {
             id: background
-            color: _blueColor
+            color: Styles._blueColor
             radius: 10
         }
 
@@ -98,14 +92,14 @@ Page {
                 name: "Hovering"
                 PropertyChanges {
                     target: background
-                    color: _lightBlueColor
+                    color: Styles._lightBlueColor
                 }
             },
             State {
                 name: "Pressed"
                 PropertyChanges {
                     target: background
-                    color: _darkBlueColor
+                    color: Styles._darkBlueColor
                 }
             }
         ]
@@ -196,7 +190,7 @@ Page {
     Label {
         id: mottoText
         width: 308
-        color: _blueColor
+        color: Styles._blueColor
         text: qsTr("Inicia sesión para empezar a controlar tu tiempo")
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 305

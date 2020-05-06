@@ -1,5 +1,6 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.5
+import "Styles.js" as Styles
 
 Page {
     id: loginPage
@@ -7,7 +8,7 @@ Page {
     height: 600
     title: qsTr("Hello World")
     background: Rectangle {
-        color: _bgColor
+        color: Styles._bgColor
     }
 
     Component.onCompleted: {
@@ -18,11 +19,6 @@ Page {
             listView.model.append({projectId: i, projectName: `Proyecto ${i}`})
         }
     }
-
-    property string _textColor: "#A0AEC0"
-    property string _bgColor: "#E2E8F0"
-    property string _whiteColor: "#F7FAFC"
-    property string _blueColor: "#63B3ED"
 
     property int selectedProjectId: -1
 
@@ -72,7 +68,7 @@ Page {
                 verticalAlignment: Text.AlignVCenter
 
                 opacity: enabled ? 1.0 : 0.3
-                color: _textColor
+                color: Styles._textColor
             }
 
             hoverEnabled: true
@@ -86,7 +82,7 @@ Page {
                 x: control.leftPadding
                 y: parent.height / 2 - height / 2
 
-                color: _bgColor
+                color: Styles._bgColor
 
                 Rectangle {
                     width: 12
@@ -99,17 +95,17 @@ Page {
                     y: parent.height / 2 - height / 2
 
                     opacity: control.checked || 0.5
-                    color: control.hovered || control.checked ? _blueColor : _whiteColor
+                    color: control.hovered || control.checked ? Styles._blueColor : Styles._whiteColor
                     visible: control.hovered || control.checked
                 }
             }
 
             background: Rectangle {
-                color: _whiteColor
+                color: Styles._whiteColor
                 radius: 5
 
                 border.width: control.checked && 2
-                border.color: control.checked ? _blueColor : _whiteColor
+                border.color: control.checked ? Styles._blueColor : Styles._whiteColor
             }
         }
     }
