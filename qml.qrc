@@ -1,5 +1,10 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>Login.qml</file>
+        <file>default.png</file>
+        <file>cover.png</file>
+        <file>default.svg</file>
+        <file>default-monochrome.svg</file>
     </qresource>
 </RCC>

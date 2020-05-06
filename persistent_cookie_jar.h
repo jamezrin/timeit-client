@@ -13,7 +13,7 @@ public:
     virtual QList<QNetworkCookie> cookiesForUrl(const QUrl &url) const;
     virtual bool setCookiesFromUrl(const QList<QNetworkCookie> &cookieList, const QUrl &url);
 
-public:
+private:
     void save();
     void load();
 
