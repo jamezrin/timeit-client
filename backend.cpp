@@ -180,7 +180,7 @@ void Backend::js_sendNote(quint32 sessionId, const QString &noteText, const QJSV
     handleReplyCallback(reply, callback);
 }
 
-QNetworkReply* Backend::sendAppEvent(quint32 sessionId, ISystem::WindowProps &windowProps) const
+QNetworkReply* Backend::sendAppEvent(quint32 sessionId, const ISystem::WindowProps &windowProps) const
 {
     QUrlQuery formData;
     formData.addQueryItem("windowName", windowProps.windowName);
@@ -205,4 +205,3 @@ void Backend::js_createAppEvent(quint32 sessionId, const QJSValue &callback) con
     QNetworkReply* reply = createAppEvent(sessionId);
     handleReplyCallback(reply, callback);
 }
-

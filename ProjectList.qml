@@ -10,13 +10,13 @@ Page {
         color: Styles._bgColor
     }
 
-    Component.onCompleted: {
-        mainWindow.resizeTo(this)
-
+    function updateProjectList() {
         backend.js_fetchProjectList(function(res, err) {
             if (!err) {
                 const projects = JSON.parse(res);
 
+                listView.model.clear();
+                selectedProjectId = -1;
                 for (const project of projects) {
                     listView.model.append({
                         projectName: project.name || "Proyecto sin nombre",
@@ -27,6 +27,11 @@ Page {
                 console.log('Unexpected error occurred:', err)
             }
         });
+    }
+
+    Component.onCompleted: {
+        mainWindow.resizeTo(this);
+        updateProjectList();
     }
 
     property int selectedProjectId: -1
@@ -248,23 +253,53 @@ Page {
         anchors.bottomMargin: 552
         anchors.left: parent.left
         anchors.leftMargin: 290
-        anchors.right: parent.right
-        anchors.rightMargin: 83
+        anchors.right: image.left
+        anchors.rightMargin: 10
         source: "assets/icons/globe-grid.svg"
         fillMode: Image.PreserveAspectFit
 
         MouseArea {
-            anchors.fill: parent
+            anchors.right: parent.right
+            anchors.rightMargin: 0
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.top: parent.top
             cursorShape: Qt.PointingHandCursor
             onClicked: Qt.openUrlExternally(TIMEIT_FRONTEND_URL)
+        }
+    }
+
+    Image {
+        id: image2
+        width: 27
+        height: 27
+        anchors.top: parent.top
+        anchors.topMargin: 21
+        anchors.right: image1.left
+        anchors.rightMargin: 10
+        anchors.left: parent.left
+        anchors.leftMargin: 252
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 552
+        source: "assets/icons/refresh.svg"
+        fillMode: Image.PreserveAspectFit
+        MouseArea {
+            anchors.right: parent.right
+            anchors.rightMargin: 0
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.top: parent.top
+            cursorShape: Qt.PointingHandCursor
+            onClicked: updateProjectList();
         }
     }
 }
 
 /*##^##
 Designer {
-    D{i:13;anchors_height:33;anchors_width:97;anchors_x:30;anchors_y:21}D{i:15;anchors_x:290;anchors_y:21}
-D{i:14;anchors_x:336;anchors_y:18}D{i:19;anchors_height:33;anchors_width:97;anchors_x:30;anchors_y:21}
-D{i:20;anchors_x:336;anchors_y:18}D{i:21;anchors_x:290;anchors_y:21}
+    D{i:0;formeditorZoom:3}D{i:15;anchors_x:290;anchors_y:21}D{i:14;anchors_x:336;anchors_y:18}
+D{i:13;anchors_height:33;anchors_width:97;anchors_x:30;anchors_y:21}D{i:19;anchors_height:33;anchors_width:97;anchors_x:30;anchors_y:21}
+D{i:21;anchors_x:290;anchors_y:21}D{i:20;anchors_x:336;anchors_y:18}D{i:22;anchors_x:290;anchors_y:21}
+D{i:24;anchors_x:290;anchors_y:21}
 }
 ##^##*/
