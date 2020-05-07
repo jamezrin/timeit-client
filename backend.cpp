@@ -30,7 +30,7 @@ Backend::Backend(QObject &parent)
     systemApi = getSystemApi();
     networkManager = new QNetworkAccessManager(&parent);
     networkManager->setCookieJar(new PersistentCookieJar(networkManager));
-    setupProxy(networkManager);
+    //setupProxy(networkManager);
 }
 
 QString handleError(QNetworkReply *reply)
