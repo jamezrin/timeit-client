@@ -14,7 +14,8 @@ Page {
 
     Component.onCompleted: {
         mainWindow.resizeTo(this)
-        timeCounter.start();
+        appEventTimer.start();
+        timeCounterTimer.start();
     }
 
     Text {
@@ -37,7 +38,21 @@ Page {
         property real secondsElapsed: 0
 
         Timer {
-            id: timeCounter
+            id: appEventTimer
+            running: false
+            triggeredOnStart: true
+            repeat: true
+            interval: 5000
+
+            onTriggered: {
+                backend.js_createAppEvent(sessionId, function (res, err) {
+                    if (err) console.log('Unexpected error occurred:', err);
+                });
+            }
+        }
+
+        Timer {
+            id: timeCounterTimer
             running: false
             triggeredOnStart: true
             repeat: true
@@ -77,12 +92,13 @@ Page {
         onClicked: {
             backend.js_endSession(sessionId, function (res, err) {
                 if (!err) {
+                    appEventTimer.stop();
+                    timeCounterTimer.stop();
                     stackView.pop();
                 } else {
                     console.log('Unexpected error occurred:', err);
                 }
             });
-
         }
 
         contentItem: Text {
@@ -120,12 +136,12 @@ Page {
         hoverEnabled: true
         HoverHandler {
             onHoveredChanged: {
-                parent.state = hovered ? "Hovering" : ""
+                parent.state = hovered ? "Hovering" : "";
             }
         }
 
         onPressedChanged: {
-            state = pressed ? "Pressed" : (hovered ? "Hovering" :"")
+            state = pressed ? "Pressed" : (hovered ? "Hovering" :"");
         }
     }
 
