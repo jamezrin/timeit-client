@@ -9,12 +9,12 @@ Window {
     visible: true
 
     function resizeTo(object) {
-        minimumHeight = object.height
-        minimumWidth = object.width
+        minimumHeight = object.height;
+        minimumWidth = object.width;
 
         // disable window resize
-        maximumHeight = object.height
-        maximumWidth = object.width
+        maximumHeight = object.height;
+        maximumWidth = object.width;
     }
 
     title: qsTr("Cliente de TimeIt")

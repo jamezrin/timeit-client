@@ -24,7 +24,7 @@ Page {
                     });
                 }
             } else {
-                console.log('Unexpected error occurred:', err)
+                console.log('Unexpected error occurred:', err);
             }
         });
     }
@@ -73,7 +73,7 @@ Page {
             text: projectName
             width: parent.width - (verticalScrollbar.width * 1.25)
 
-            onCheckedChanged: selectedProjectId = projectId
+            onCheckedChanged: selectedProjectId = projectId;
 
             contentItem: Text {
                 text: parent.text
@@ -147,7 +147,7 @@ Page {
                         sessionId: session.id
                     });
                 } else {
-                    console.log('Unexpected error occurred:', err)
+                    console.log('Unexpected error occurred:', err);
                 }
             });
         }
@@ -186,14 +186,10 @@ Page {
 
         hoverEnabled: true
         HoverHandler {
-            onHoveredChanged: {
-                parent.state = hovered ? "Hovering" : ""
-            }
+            onHoveredChanged: parent.state = hovered ? "Hovering" : "";
         }
 
-        onPressedChanged: {
-            state = pressed ? "Pressed" : (hovered ? "Hovering" :"")
-        }
+        onPressedChanged: state = pressed ? "Pressed" : (hovered ? "Hovering" :"");
     }
 
     Label {
@@ -233,10 +229,10 @@ Page {
             onClicked: {
                 backend.js_deauthenticateUser(function (res, err) {
                     if (!err) {
-                        stackView.pop()
-                        mainWindow.resizeTo(stackView.currentItem)
+                        stackView.pop();
+                        mainWindow.resizeTo(stackView.currentItem);
                     } else {
-                        console.log('Unexpected error occurred:', err)
+                        console.log('Unexpected error occurred:', err);
                     }
                 });
             }
@@ -265,7 +261,7 @@ Page {
             anchors.left: parent.left
             anchors.top: parent.top
             cursorShape: Qt.PointingHandCursor
-            onClicked: Qt.openUrlExternally(TIMEIT_FRONTEND_URL)
+            onClicked: Qt.openUrlExternally(TIMEIT_FRONTEND_URL);
         }
     }
 
@@ -283,6 +279,7 @@ Page {
         anchors.bottomMargin: 552
         source: "assets/icons/refresh.svg"
         fillMode: Image.PreserveAspectFit
+
         MouseArea {
             anchors.right: parent.right
             anchors.rightMargin: 0

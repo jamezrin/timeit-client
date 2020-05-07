@@ -21,8 +21,6 @@ Page {
         color: Styles._bgColor
     }
 
-    property alias warningNoticeText: warningNoticeText
-
     Label {
         id: warningNoticeText
         width: 308
@@ -38,7 +36,7 @@ Page {
         anchors.left: parent.left
         anchors.leftMargin: 26
         horizontalAlignment: Text.AlignHCenter
-        Component.onCompleted: visible = false
+        Component.onCompleted: visible = false;
     }
 
     TextField {
@@ -160,18 +158,12 @@ Page {
 
         hoverEnabled: true
         HoverHandler {
-            onHoveredChanged: {
-                parent.state = hovered ? "Hovering" : ""
-            }
+            onHoveredChanged: parent.state = hovered ? "Hovering" : "";
         }
 
-        onPressedChanged: {
-            state = pressed ? "Pressed" : (hovered ? "Hovering" :"")
-        }
+        onPressedChanged: state = pressed ? "Pressed" : (hovered ? "Hovering" :"");
 
-        onClicked: {
-            executeLoginAction();
-        }
+        onClicked: executeLoginAction();
 
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 55
@@ -211,7 +203,7 @@ Page {
 
                 hoverEnabled: true
                 onHoveredChanged: parent.font.underline = containsMouse
-                onClicked: Qt.openUrlExternally(TIMEIT_FRONTEND_URL)
+                onClicked: Qt.openUrlExternally(TIMEIT_FRONTEND_URL);
                 cursorShape: Qt.PointingHandCursor
             }
         }

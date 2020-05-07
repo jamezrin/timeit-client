@@ -13,7 +13,7 @@ Page {
     property real sessionId: -1
 
     Component.onCompleted: {
-        mainWindow.resizeTo(this)
+        mainWindow.resizeTo(this);
         appEventTimer.start();
         timeCounterTimer.start();
     }
@@ -135,14 +135,10 @@ Page {
 
         hoverEnabled: true
         HoverHandler {
-            onHoveredChanged: {
-                parent.state = hovered ? "Hovering" : "";
-            }
+            onHoveredChanged: parent.state = hovered ? "Hovering" : "";
         }
 
-        onPressedChanged: {
-            state = pressed ? "Pressed" : (hovered ? "Hovering" :"");
-        }
+        onPressedChanged: state = pressed ? "Pressed" : (hovered ? "Hovering" :"");
     }
 
     Label {
