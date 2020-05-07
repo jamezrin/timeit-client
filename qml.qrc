@@ -4,8 +4,9 @@
         <file>Login.qml</file>
         <file>assets/logo/default.png</file>
         <file>assets/logo/cover.png</file>
-        <file>assets/logo/default.svg</file>
-        <file>assets/logo/default-monochrome.svg</file>
+        <file>assets/logo/vector/default.svg</file>
+        <file>assets/logo/vector/default-monochrome.svg</file>
+        <file>assets/logo/main_256.png</file>
         <file>ProjectList.qml</file>
         <file>Session.qml</file>
         <file>Styles.js</file>

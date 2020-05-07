@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QDebug>
 #include <QQmlContext>
+#include <QIcon>
 
 #include "backend.h"
 #include "persistent_cookie_jar.h"
@@ -18,6 +19,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("TIMEIT_BACKEND_URL", TIMEIT_BACKEND_URL);
     engine.rootContext()->setContextProperty("backend", &backend);
 
+    app.setWindowIcon(QIcon(":/assets/logo/main_256.png"));
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
