@@ -1,5 +1,4 @@
-QT += quick \
-    widgets
+QT += quick widgets
 
 CONFIG += c++11
 
@@ -41,14 +40,14 @@ CONFIG(release, debug|release) {
 }
 
 HEADERS += \
-    app.h \
+    backend.h \
     persistent_cookie_jar.h \
     platform/system.h \
     platform/linux_x11/linux_system.h \
     platform/windows/windows_system.h
 
 SOURCES += \
-    app.cpp \
+    backend.cpp \
     main.cpp \
     persistent_cookie_jar.cpp \
     platform/linux_x11/linux_system.cpp \

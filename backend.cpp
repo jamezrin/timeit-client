@@ -1,7 +1,4 @@
-#include "app.h"
-
-#include "persistent_cookie_jar.h"
-#include "platform/system.h"
+#include "backend.h"
 
 #if defined(Q_OS_LINUX)
     #include "platform/linux_x11/linux_system.h"
@@ -20,17 +17,10 @@ ISystem* getSystemApi()
 #endif
 }
 
-#include <QNetworkCookieJar>
-#include <QMutexLocker>
-#include <QSettings>
-#include <QNetworkProxy>
-#include <QUrlQuery>
-#include <QNetworkConfiguration>
-
-App::App()
+Backend::Backend(QObject &parent)
 {
     systemApi = getSystemApi();
-    networkManager = new QNetworkAccessManager(this);
+    networkManager = new QNetworkAccessManager(&parent);
 
     QNetworkProxy proxy;
     proxy.setType(QNetworkProxy::HttpProxy);
@@ -40,9 +30,6 @@ App::App()
 
     networkManager->setProxy(proxy);
     networkManager->setCookieJar(new PersistentCookieJar(networkManager));
-
-    qDebug() << "Targetting backend at " TIMEIT_BACKEND_URL << " and "
-             << "targetting frontend at " TIMEIT_FRONTEND_URL;
 
     checkCurrentUser();
 
@@ -55,7 +42,7 @@ App::App()
     timer->start(500);
 }
 
- void App::authenticateUser()
+ void Backend::authenticateUser()
  {
      qDebug() << "Authenticating user...";
 
@@ -84,7 +71,7 @@ App::App()
      });
  }
 
-void App::checkCurrentUser()
+void Backend::checkCurrentUser()
 {
     QNetworkRequest request(QUrl(TIMEIT_BACKEND_URL "/current-user"));
     request.setAttribute(QNetworkRequest::CookieLoadControlAttribute, QNetworkRequest::Automatic);
@@ -109,10 +96,15 @@ void App::checkCurrentUser()
     });
 }
 
-void App::printWindow()
+void Backend::printWindow()
 {
     ISystem::WindowProps currentWindow = systemApi->getCurrentFocusedWindow();
     qDebug() << currentWindow.windowName
              << " " << currentWindow.windowClass
              << " " << currentWindow.windowPid;
+}
+
+void Backend::sayHi()
+{
+    qDebug() << "Hi world";
 }

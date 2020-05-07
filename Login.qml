@@ -8,7 +8,9 @@ Page {
     height: 450
     title: qsTr("Inicio de Sesión")
 
-    Component.onCompleted: mainWindow.resizeTo(this)
+    Component.onCompleted: {
+        mainWindow.resizeTo(this)
+    }
 
     background: Rectangle {
         color: Styles._bgColor
@@ -47,6 +49,10 @@ Page {
         selectByMouse: true
         background: Rectangle {
             color: Styles._whiteColor
+            border.width: parent.activeFocus && 2
+            border.color: parent.activeFocus
+                            ? Styles._blueColor
+                            : Styles._whiteColor
             radius: 5
         }
     }
@@ -68,6 +74,10 @@ Page {
         selectByMouse: true
         background: Rectangle {
             color: Styles._whiteColor
+            border.width: parent.activeFocus && 2
+            border.color: parent.activeFocus
+                            ? Styles._blueColor
+                            : Styles._whiteColor
             radius: 5
         }
     }
@@ -77,7 +87,6 @@ Page {
         width: 270
         height: 37
         text: qsTr("Iniciar sesión")
-        checkable: false
         display: AbstractButton.TextBesideIcon
         font.pixelSize: 20
 
@@ -85,6 +94,15 @@ Page {
             id: background
             color: Styles._blueColor
             radius: 10
+        }
+
+        contentItem: Text {
+            text: parent.text
+            font: parent.font
+            color: Styles._darkestGrayColor
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
         }
 
         states: [
@@ -107,16 +125,17 @@ Page {
         hoverEnabled: true
         HoverHandler {
             onHoveredChanged: {
-                loginButton.state = hovered ? "Hovering" : ""
+                parent.state = hovered ? "Hovering" : ""
             }
         }
 
         onPressedChanged: {
-            loginButton.state = pressed ? "Pressed" : (hovered ? "Hovering" :"")
+            state = pressed ? "Pressed" : (hovered ? "Hovering" :"")
         }
 
         onClicked: {
             if (true) {
+                backend.sayHi();
                 stackView.push("ProjectList.qml")
                 incorrectDetailsText.visible = true
             } else {
@@ -160,7 +179,6 @@ Page {
                 anchors.topMargin: -10
                 anchors.fill: parent
 
-
                 hoverEnabled: true
                 onHoveredChanged: parent.font.underline = containsMouse
                 onClicked: Qt.openUrlExternally(TIMEIT_FRONTEND_URL)
@@ -168,8 +186,6 @@ Page {
             }
         }
     }
-
-
 
     Image {
         id: appLogo
@@ -184,7 +200,7 @@ Page {
         anchors.left: parent.left
         anchors.leftMargin: 26
         fillMode: Image.PreserveAspectFit
-        source: "default-monochrome.svg"
+        source: "assets/logo/default-monochrome.svg"
     }
 
     Label {
@@ -206,8 +222,6 @@ Page {
         horizontalAlignment: Text.AlignHCenter
     }
 }
-
-
 
 /*##^##
 Designer {

@@ -2,12 +2,14 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>Login.qml</file>
-        <file>default.png</file>
-        <file>cover.png</file>
-        <file>default.svg</file>
-        <file>default-monochrome.svg</file>
+        <file>assets/logo/default.png</file>
+        <file>assets/logo/cover.png</file>
+        <file>assets/logo/default.svg</file>
+        <file>assets/logo/default-monochrome.svg</file>
         <file>ProjectList.qml</file>
         <file>Session.qml</file>
         <file>Styles.js</file>
+        <file>assets/icons/logout.svg</file>
+        <file>assets/icons/globe-grid.svg</file>
     </qresource>
 </RCC>

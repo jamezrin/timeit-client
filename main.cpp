@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <QQmlContext>
 
-#include "app.h"
+#include "backend.h"
 #include "persistent_cookie_jar.h"
 
 int main(int argc, char *argv[])
@@ -11,8 +11,6 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
-
-    App* controller = new App();
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));
@@ -23,14 +21,14 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
     engine.load(url);
 
+    qDebug() << "frontend url: " TIMEIT_FRONTEND_URL;
+    qDebug() << "backend url: " TIMEIT_BACKEND_URL;
     engine.rootContext()->setContextProperty("TIMEIT_FRONTEND_URL", TIMEIT_FRONTEND_URL);
     engine.rootContext()->setContextProperty("TIMEIT_BACKEND_URL", TIMEIT_BACKEND_URL);
 
-    const int returnCode = app.exec();
+    Backend backend(app);
+    engine.rootContext()->setContextProperty("backend", &backend);
 
-    // Destructor saves the PersistentCookieJar
-    delete controller->networkManager->cookieJar();
-
-    return returnCode;
+    return app.exec();
 }
 

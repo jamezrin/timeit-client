@@ -3,10 +3,9 @@ import QtQuick.Controls 2.5
 import "Styles.js" as Styles
 
 Page {
-    id: loginPage
+    id: projectListPage
     width: 400
     height: 600
-    title: qsTr("Hello World")
     background: Rectangle {
         color: Styles._bgColor
     }
@@ -27,12 +26,12 @@ Page {
 
         anchors.topMargin: 60
         anchors.rightMargin: 30
-        anchors.bottomMargin: 80
+        anchors.bottomMargin: 19
         anchors.leftMargin: 30
 
         anchors.top: parent.top
         anchors.right: parent.right
-        anchors.bottom: button.top
+        anchors.bottom: startCounterButton.top
         anchors.left: parent.left
 
         ScrollBar.vertical: ScrollBar {
@@ -43,6 +42,7 @@ Page {
         Label {
             anchors.fill: parent
             text: qsTr("Todavía no eres miembro de un proyecto")
+            anchors.bottomMargin: 0
             wrapMode: Text.WrapAnywhere
             horizontalAlignment: Qt.AlignHCenter
             verticalAlignment: Qt.AlignVCenter
@@ -111,55 +111,120 @@ Page {
     }
 
     Button {
-        id: button
-        text: qsTr("Button")
+        id: startCounterButton
+        text: qsTr("Iniciar contador")
+        font.pointSize: 20
         anchors.top: parent.top
-        anchors.topMargin: 542
+        anchors.topMargin: 519
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 30
+        anchors.bottomMargin: 19
         anchors.right: parent.right
-        anchors.rightMargin: 158
+        anchors.rightMargin: 46
         anchors.left: parent.left
-        anchors.leftMargin: 158
+        anchors.leftMargin: 46
+
         onClicked: {
             console.log(selectedProjectId)
+            stackView.push("Session.qml");
+        }
+
+        contentItem: Text {
+            text: parent.text
+            font: parent.font
+            color: Styles._darkestGrayColor
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+        }
+
+        background: Rectangle {
+            id: background
+            color: Styles._greenColor
+            radius: 10
+        }
+
+        states: [
+            State {
+                name: "Hovering"
+                PropertyChanges {
+                    target: background
+                    color: Styles._lightGreenColor
+                }
+            },
+            State {
+                name: "Pressed"
+                PropertyChanges {
+                    target: background
+                    color: Styles._darkGreenColor
+                }
+            }
+        ]
+
+        hoverEnabled: true
+        HoverHandler {
+            onHoveredChanged: {
+                parent.state = hovered ? "Hovering" : ""
+            }
+        }
+
+        onPressedChanged: {
+            state = pressed ? "Pressed" : (hovered ? "Hovering" :"")
         }
     }
 
-    Text {
-        id: timeCounter
-        x: 176
-        y: 505
-        width: 49
-        height: 24
-        text: qsTr("Text")
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: 18
+    Label {
+        id: projectsPageTitleLabel
+        width: 100
+        color: Styles._blueColor
+        text: qsTr("Proyectos")
+        font.pointSize: 16
+        anchors.top: parent.top
+        anchors.topMargin: 15
+        anchors.bottom: listView.top
+        anchors.bottomMargin: 14
+        anchors.left: parent.left
+        anchors.leftMargin: 30
+        anchors.right: parent.right
+        anchors.rightMargin: 206
+    }
 
-        property real secondsElapsed: 0
+    Image {
+        id: image
+        width: 34
+        height: 36
+        anchors.top: parent.top
+        anchors.topMargin: 23
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 552
+        anchors.left: parent.left
+        anchors.leftMargin: 325
+        anchors.right: parent.right
+        anchors.rightMargin: 48
+        source: "assets/icons/logout.svg"
+        fillMode: Image.PreserveAspectFit
+    }
 
-        Timer {
-            running: true
-            repeat: true
-            interval: 1000
-            triggeredOnStart: true
-
-            function z(number) {
-                if (number < 10) {
-                    return "0" + number;
-                }
-
-                return number;
-            }
-
-            onTriggered: {
-                const hours = Math.floor(timeCounter.secondsElapsed / 3600);
-                const minutes = Math.floor((timeCounter.secondsElapsed % 3600) / 60);
-                const seconds = (timeCounter.secondsElapsed % 3600) % 60;
-                timeCounter.text = `${z(hours)}:${z(minutes)}:${z(seconds)}`;
-                timeCounter.secondsElapsed = timeCounter.secondsElapsed + 1;
-            }
-        }
+    Image {
+        id: image1
+        width: 27
+        height: 27
+        anchors.top: parent.top
+        anchors.topMargin: 21
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 552
+        anchors.left: parent.left
+        anchors.leftMargin: 290
+        anchors.right: parent.right
+        anchors.rightMargin: 83
+        fillMode: Image.PreserveAspectFit
+        source: "assets/icons/globe-grid.svg"
     }
 }
+
+/*##^##
+Designer {
+    D{i:13;anchors_height:33;anchors_width:97;anchors_x:30;anchors_y:21}D{i:15;anchors_x:290;anchors_y:21}
+D{i:14;anchors_x:336;anchors_y:18}D{i:19;anchors_height:33;anchors_width:97;anchors_x:30;anchors_y:21}
+D{i:20;anchors_x:336;anchors_y:18}D{i:21;anchors_x:290;anchors_y:21}
+}
+##^##*/
