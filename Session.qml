@@ -164,7 +164,7 @@ Page {
     TextArea {
         id: noteTextArea
         width: 342
-        height: 169
+        height: 365
         anchors.right: parent.right
         anchors.rightMargin: 28
         anchors.left: parent.left
@@ -226,6 +226,7 @@ Page {
 /*##^##
 Designer {
     D{i:2;anchors_x:200;anchors_y:15}D{i:13;anchors_x:30;anchors_y:117}D{i:15;anchors_x:30;anchors_y:89}
-D{i:16;anchors_height:26;anchors_x:302;anchors_y:89}
+D{i:14;anchors_x:30;anchors_y:117}D{i:16;anchors_height:26;anchors_x:30;anchors_y:89}
+D{i:17;anchors_height:26;anchors_x:302;anchors_y:89}
 }
 ##^##*/
