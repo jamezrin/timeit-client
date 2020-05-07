@@ -17,94 +17,214 @@ ISystem* getSystemApi()
 #endif
 }
 
-Backend::Backend(QObject &parent)
-{
-    systemApi = getSystemApi();
-    networkManager = new QNetworkAccessManager(&parent);
-
+void setupProxy(QNetworkAccessManager *networkManager) {
     QNetworkProxy proxy;
     proxy.setType(QNetworkProxy::HttpProxy);
     proxy.setHostName("localhost");
     proxy.setPort(8000);
-    QNetworkProxy::setApplicationProxy(proxy);
-
     networkManager->setProxy(proxy);
-    networkManager->setCookieJar(new PersistentCookieJar(networkManager));
-
-    checkCurrentUser();
-
-    QTimer* timer = new QTimer(this);
-
-    // the preprocessor knows its the timeout() slot function inside timer
-    // likewise, the preprocessor knows its the printWindow slot function inside this
-    connect(timer, SIGNAL(timeout()), this, SLOT(printWindow()));
-
-    timer->start(500);
 }
 
- void Backend::authenticateUser()
- {
-     qDebug() << "Authenticating user...";
+Backend::Backend(QObject &parent)
+{
+    systemApi = getSystemApi();
+    networkManager = new QNetworkAccessManager(&parent);
+    networkManager->setCookieJar(new PersistentCookieJar(networkManager));
+    setupProxy(networkManager);
+}
 
-     QUrlQuery formData;
-     formData.addQueryItem("emailAddress", "jaime43@jamezrin.name");
-     formData.addQueryItem("password", "superpass");
-
-     QNetworkRequest request(QUrl(TIMEIT_BACKEND_URL "/authenticate"));
-     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-     request.setAttribute(QNetworkRequest::CookieSaveControlAttribute, QNetworkRequest::Automatic);
-     QNetworkReply *reply = networkManager->post(request, formData.toString(QUrl::FullyEncoded).toUtf8());
-
-     connect(reply, &QNetworkReply::finished, [=]() {
-         if(reply->error() == QNetworkReply::NoError)
-         {
-             QByteArray response = reply->readAll();
-             qDebug() << response;
-
-             qDebug() << "Authenticated the user, checking current user again...";
-             checkCurrentUser();
-         }
-         else
-         {
-             qDebug() << "Error when authenticating " << reply->error();
-         }
-     });
- }
-
-void Backend::checkCurrentUser()
+QNetworkReply* Backend::fetchCurrentUser() const
 {
     QNetworkRequest request(QUrl(TIMEIT_BACKEND_URL "/current-user"));
-    request.setAttribute(QNetworkRequest::CookieLoadControlAttribute, QNetworkRequest::Automatic);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
     QNetworkReply *reply = networkManager->get(request);
-    connect(reply, &QNetworkReply::finished, [=]() {
-        if(reply->error() == QNetworkReply::NoError)
-        {
-            qDebug() << "User is logged in!";
 
-            QByteArray response = reply->readAll();
-            qDebug() << response;
-        }
-        else if (reply->error() == QNetworkReply::AuthenticationRequiredError)
-        {
-            qDebug() << "User is not authenticated, authenticating...";
-            authenticateUser();
-        }
-        else
-        {
-            qDebug() << "Different error " << reply->error();
-        }
+    return reply;
+}
+
+void Backend::js_fetchCurrentUser(const QJSValue &callback) const
+{
+    QNetworkReply* reply = fetchCurrentUser();
+    connect(reply, &QNetworkReply::finished, [=]() {
+        QJSValue cbCopy(callback);
+        QJSEngine *engine = qjsEngine(this);
+        cbCopy.call(QJSValueList {
+                        engine->toScriptValue(reply->readAll()),
+                        engine->toScriptValue(reply->error())
+        });
+        reply->deleteLater();
     });
 }
 
-void Backend::printWindow()
+QNetworkReply* Backend::deauthenticateUser() const
 {
-    ISystem::WindowProps currentWindow = systemApi->getCurrentFocusedWindow();
-    qDebug() << currentWindow.windowName
-             << " " << currentWindow.windowClass
-             << " " << currentWindow.windowPid;
+    QNetworkRequest request(QUrl(TIMEIT_BACKEND_URL "/deauthenticate"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+    QNetworkReply *reply = networkManager->post(request, QByteArray());
+
+    return reply;
 }
 
-void Backend::sayHi()
+void Backend::js_deauthenticateUser(const QJSValue &callback) const
 {
-    qDebug() << "Hi world";
+    QNetworkReply* reply = deauthenticateUser();
+    connect(reply, &QNetworkReply::finished, [=]() {
+        QJSValue cbCopy(callback);
+        QJSEngine *engine = qjsEngine(this);
+        cbCopy.call(QJSValueList {
+                        engine->toScriptValue(reply->readAll()),
+                        engine->toScriptValue(reply->error())
+        });
+        reply->deleteLater();
+    });
 }
+
+QNetworkReply* Backend::authenticateUser(QString &emailAddress,
+                                         QString &password) const
+{
+    QUrlQuery formData;
+    formData.addQueryItem("emailAddress", emailAddress);
+    formData.addQueryItem("password", password);
+
+    QNetworkRequest request(QUrl(TIMEIT_BACKEND_URL "/authenticate"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+    QNetworkReply *reply = networkManager->post(request, formData.toString(QUrl::FullyEncoded).toUtf8());
+
+    return reply;
+}
+
+void Backend::js_authenticateUser(QString &emailAddress, QString &password, const QJSValue &callback) const
+{
+    QNetworkReply* reply = authenticateUser(emailAddress, password);
+    connect(reply, &QNetworkReply::finished, [=]() {
+        QJSValue cbCopy(callback);
+        QJSEngine *engine = qjsEngine(this);
+        cbCopy.call(QJSValueList {
+                        engine->toScriptValue(reply->readAll()),
+                        engine->toScriptValue(reply->error())
+        });
+        reply->deleteLater();
+    });
+}
+
+QNetworkReply* Backend::fetchProjectList() const
+{
+    QNetworkRequest request(QUrl(TIMEIT_BACKEND_URL "/projects"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+    QNetworkReply *reply = networkManager->get(request);
+
+    return reply;
+}
+
+void Backend::js_fetchProjectList(const QJSValue &callback) const
+{
+    QNetworkReply* reply = fetchProjectList();
+    connect(reply, &QNetworkReply::finished, [=]() {
+        QJSValue cbCopy(callback);
+        QJSEngine *engine = qjsEngine(this);
+        cbCopy.call(QJSValueList {
+                        engine->toScriptValue(reply->readAll()),
+                        engine->toScriptValue(reply->error())
+        });
+        reply->deleteLater();
+    });
+}
+
+QNetworkReply* Backend::createSession(quint32 projectId) const
+{
+    QNetworkRequest request(QUrl(QString("%s/projects/%d/sessions").arg(TIMEIT_BACKEND_URL, projectId)));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+    QNetworkReply *reply = networkManager->post(request, QByteArray());
+
+    return reply;
+}
+
+void Backend::js_createSession(quint32 projectId, const QJSValue &callback) const
+{
+    QNetworkReply* reply = createSession(projectId);
+    connect(reply, &QNetworkReply::finished, [=]() {
+        QJSValue cbCopy(callback);
+        QJSEngine *engine = qjsEngine(this);
+        cbCopy.call(QJSValueList {
+                        engine->toScriptValue(reply->readAll()),
+                        engine->toScriptValue(reply->error())
+        });
+        reply->deleteLater();
+    });
+}
+
+QNetworkReply* Backend::sendNote(quint32 sessionId, QString &noteText) const
+{
+    QUrlQuery formData;
+    formData.addQueryItem("noteText", noteText);
+
+    QNetworkRequest request(QUrl(QString("%s/sessions/%d/notes").arg(TIMEIT_BACKEND_URL, sessionId)));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+    QNetworkReply *reply = networkManager->post(request, formData.toString(QUrl::FullyEncoded).toUtf8());
+
+    return reply;
+}
+
+void Backend::js_sendNote(quint32 sessionId, QString &noteText, const QJSValue &callback) const
+{
+    QNetworkReply* reply = sendNote(sessionId, noteText);
+    connect(reply, &QNetworkReply::finished, [=]() {
+        QJSValue cbCopy(callback);
+        QJSEngine *engine = qjsEngine(this);
+        cbCopy.call(QJSValueList {
+                        engine->toScriptValue(reply->readAll()),
+                        engine->toScriptValue(reply->error())
+        });
+        reply->deleteLater();
+    });
+}
+
+QNetworkReply* Backend::sendAppEvent(quint32 sessionId, ISystem::WindowProps &windowProps) const
+{
+    QUrlQuery formData;
+    formData.addQueryItem("windowName", windowProps.windowName);
+    formData.addQueryItem("windowClass", windowProps.windowClass);
+    formData.addQueryItem("windowPid", QString::number(windowProps.windowPid));
+
+    QNetworkRequest request(QUrl(QString("%s/sessions/%d/app_events").arg(TIMEIT_BACKEND_URL, sessionId)));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+    QNetworkReply *reply = networkManager->post(request, formData.toString(QUrl::FullyEncoded).toUtf8());
+
+    return reply;
+}
+
+QNetworkReply* Backend::createAppEvent(quint32 sessionId) const
+{
+    ISystem::WindowProps windowProps = systemApi->getCurrentFocusedWindow();
+    return sendAppEvent(sessionId, windowProps);
+}
+
+void handleReplyCallback(QNetworkReply *reply, const QJSValue &callback)
+{
+    connect(reply, &QNetworkReply::finished, [=]() {
+        QJSValue cbCopy(callback);
+        QJSEngine *engine = qjsEngine(this);
+        cbCopy.call(QJSValueList {
+                        engine->toScriptValue(reply->readAll()),
+                        engine->toScriptValue(reply->error())
+        });
+        reply->deleteLater();
+    });
+}
+
+void Backend::js_createAppEvent(quint32 sessionId, const QJSValue &callback) const
+{
+    QNetworkReply* reply = createAppEvent(sessionId);
+    handleReplyCallback(reply, callback);
+    connect(reply, &QNetworkReply::finished, [=]() {
+        QJSValue cbCopy(callback);
+        QJSEngine *engine = qjsEngine(this);
+        cbCopy.call(QJSValueList {
+                        engine->toScriptValue(reply->readAll()),
+                        engine->toScriptValue(reply->error())
+        });
+        reply->deleteLater();
+    });
+}
+
+

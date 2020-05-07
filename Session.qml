@@ -123,7 +123,7 @@ Page {
     }
 
     Label {
-        id: projectsPageTitleLabel
+        id: sessionPageTitleLabel
         width: 100
         color: Styles._blueColor
         text: qsTr("Sesión actual")
@@ -148,10 +148,16 @@ Page {
         anchors.leftMargin: 30
         anchors.top: parent.top
         anchors.topMargin: 117
-        placeholderText: qsTr("Lo siguiente en lo que voy a trabajar hoy es...")
+        placeholderText: qsTr("Lo siguiente que voy a hacer es...")
+        selectByMouse: true
+        selectionColor: Styles._lightBlueColor
         background: Rectangle {
             color: Styles._whiteColor
             radius: 6
+            border.width: parent.focus && 2
+            border.color: parent.focus
+                            ? Styles._blueColor
+                            : Styles._whiteColor
         }
     }
 

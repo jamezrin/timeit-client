@@ -202,6 +202,15 @@ Page {
         anchors.rightMargin: 48
         source: "assets/icons/logout.svg"
         fillMode: Image.PreserveAspectFit
+
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            onClicked: {
+                stackView.pop()
+                mainWindow.resizeTo(stackView.currentItem)
+            }
+        }
     }
 
     Image {
@@ -216,8 +225,14 @@ Page {
         anchors.leftMargin: 290
         anchors.right: parent.right
         anchors.rightMargin: 83
-        fillMode: Image.PreserveAspectFit
         source: "assets/icons/globe-grid.svg"
+        fillMode: Image.PreserveAspectFit
+
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            onClicked: Qt.openUrlExternally(TIMEIT_FRONTEND_URL)
+        }
     }
 }
 

@@ -10,14 +10,23 @@ Page {
 
     Component.onCompleted: {
         mainWindow.resizeTo(this)
+
+        backend.js_fetchCurrentUser(function(res, err) {
+            console.log(res)
+            console.log(err)
+
+            //stackView.push("ProjectList.qml")
+        });
     }
 
     background: Rectangle {
         color: Styles._bgColor
     }
 
+    property alias warningNoticeText: warningNoticeText
+
     Label {
-        id: incorrectDetailsText
+        id: warningNoticeText
         width: 308
         height: 24
         color: Styles._redColor
@@ -47,10 +56,11 @@ Page {
         placeholderText: qsTr("Correo electrónico")
         font.pointSize: 14
         selectByMouse: true
+        selectionColor: Styles._lightBlueColor
         background: Rectangle {
             color: Styles._whiteColor
-            border.width: parent.activeFocus && 2
-            border.color: parent.activeFocus
+            border.width: parent.focus && 2
+            border.color: parent.focus
                             ? Styles._blueColor
                             : Styles._whiteColor
             radius: 5
@@ -72,10 +82,11 @@ Page {
         echoMode: TextField.Password
         font.pointSize: 14
         selectByMouse: true
+        selectionColor: Styles._lightBlueColor
         background: Rectangle {
             color: Styles._whiteColor
-            border.width: parent.activeFocus && 2
-            border.color: parent.activeFocus
+            border.width: parent.focus && 2
+            border.color: parent.focus
                             ? Styles._blueColor
                             : Styles._whiteColor
             radius: 5
@@ -134,10 +145,14 @@ Page {
         }
 
         onClicked: {
+            console.log(backend)
+
             if (true) {
-                backend.sayHi();
+                console.log(backend)
+                backend.fetchCurrentUser();
+
                 stackView.push("ProjectList.qml")
-                incorrectDetailsText.visible = true
+                warningNoticeText.visible = true
             } else {
 
             }
