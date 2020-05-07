@@ -34,6 +34,8 @@ public:
     mutable ISystem *systemApi;
     mutable QNetworkAccessManager *networkManager;
 
+    void handleReplyCallback(QNetworkReply *reply, const QJSValue &callback) const;
+
 public slots:
     QNetworkReply* fetchCurrentUser() const;
     void js_fetchCurrentUser(const QJSValue &callback) const;
@@ -41,8 +43,8 @@ public slots:
     QNetworkReply* deauthenticateUser() const;
     void js_deauthenticateUser(const QJSValue &callback) const;
 
-    QNetworkReply* authenticateUser(QString &emailAddress, QString &password) const;
-    void js_authenticateUser(QString &emailAddress, QString &password, const QJSValue &callback) const;
+    QNetworkReply* authenticateUser(const QString &emailAddress, const QString &password) const;
+    void js_authenticateUser(const QString &emailAddress, const QString &password, const QJSValue &callback) const;
 
     QNetworkReply* fetchProjectList() const;
     void js_fetchProjectList(const QJSValue &callback) const;
@@ -50,8 +52,8 @@ public slots:
     QNetworkReply* createSession(quint32 projectId) const;
     void js_createSession(quint32 projectId, const QJSValue &callback) const;
 
-    QNetworkReply* sendNote(quint32 sessionId, QString &noteText) const;
-    void js_sendNote(quint32 sessionId, QString &noteText, const QJSValue &callback) const;
+    QNetworkReply* sendNote(quint32 sessionId, const QString &noteText) const;
+    void js_sendNote(quint32 sessionId, const QString &noteText, const QJSValue &callback) const;
 
     QNetworkReply* sendAppEvent(quint32 sessionId, ISystem::WindowProps &windowProps) const;
     QNetworkReply* createAppEvent(quint32 sessionId) const;

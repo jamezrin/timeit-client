@@ -11,11 +11,9 @@ Page {
     Component.onCompleted: {
         mainWindow.resizeTo(this)
 
+        // If already logged in
         backend.js_fetchCurrentUser(function(res, err) {
-            console.log(res)
-            console.log(err)
-
-            //stackView.push("ProjectList.qml")
+            if (!err) stackView.push("ProjectList.qml");
         });
     }
 
@@ -30,7 +28,7 @@ Page {
         width: 308
         height: 24
         color: Styles._redColor
-        text: qsTr("Tu correo o contraseña son incorrectos")
+        text: qsTr("Lorem ipsum dolor sit amet")
         anchors.top: parent.top
         anchors.topMargin: 151
         anchors.bottom: parent.bottom
@@ -145,17 +143,24 @@ Page {
         }
 
         onClicked: {
-            console.log(backend)
+            backend.js_authenticateUser(emailTextField.text,
+                                        passwordTextField.text,
+                                        function(res, err) {
+                if (err) {
+                    if (err === "INVALID_CREDENTIALS") {
+                        warningNoticeText.text = "Tu correo o contraseña son incorrectos";
+                    } else if (err === "INACTIVE_ACCOUNT") {
+                        warningNoticeText.text = "Tu cuenta todavía no ha sido confirmada";
+                    } else {
+                        warningNoticeText.text = "Error desconocido: " + err;
+                    }
 
-            if (true) {
-                console.log(backend)
-                backend.fetchCurrentUser();
-
-                stackView.push("ProjectList.qml")
-                warningNoticeText.visible = true
-            } else {
-
-            }
+                    warningNoticeText.visible = true;
+                } else {
+                    warningNoticeText.visible = false;
+                    stackView.push("ProjectList.qml");
+                }
+            });
         }
 
         anchors.bottom: parent.bottom

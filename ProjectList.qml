@@ -13,10 +13,20 @@ Page {
     Component.onCompleted: {
         mainWindow.resizeTo(this)
 
-        // TODO: fetch projects
-        for (var i = 0; i < 200; i++) {
-            listView.model.append({projectId: i, projectName: `Proyecto ${i}`})
-        }
+        backend.js_fetchProjectList(function(res, err) {
+            if (!err) {
+                const projects = JSON.parse(res);
+
+                for (const project of projects) {
+                    listView.model.append({
+                        projectName: project.name || "Proyecto sin nombre",
+                        projectId: project.id
+                    });
+                }
+            } else {
+                console.log('Unexpected error occurred:', err)
+            }
+        });
     }
 
     property int selectedProjectId: -1
@@ -122,10 +132,19 @@ Page {
         anchors.rightMargin: 46
         anchors.left: parent.left
         anchors.leftMargin: 46
+        enabled: selectedProjectId != -1
 
         onClicked: {
-            console.log(selectedProjectId)
-            stackView.push("Session.qml");
+            backend.js_createSession(selectedProjectId, function(res, err) {
+                if (!err) {
+                    const session = JSON.parse(res);
+                    stackView.push("Session.qml", {
+                       sessionId: session.id
+                   });
+                } else {
+                    console.log('Unexpected error occurred:', err)
+                }
+            });
         }
 
         contentItem: Text {
@@ -139,7 +158,7 @@ Page {
 
         background: Rectangle {
             id: background
-            color: Styles._greenColor
+            color: enabled ? Styles._greenColor : Styles._textColor
             radius: 10
         }
 
@@ -207,8 +226,14 @@ Page {
             anchors.fill: parent
             cursorShape: Qt.PointingHandCursor
             onClicked: {
-                stackView.pop()
-                mainWindow.resizeTo(stackView.currentItem)
+                backend.js_deauthenticateUser(function (res, err) {
+                    if (!err) {
+                        stackView.pop()
+                        mainWindow.resizeTo(stackView.currentItem)
+                    } else {
+                        console.log('Unexpected error occurred:', err)
+                    }
+                });
             }
         }
     }

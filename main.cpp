@@ -11,14 +11,13 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
+    Backend backend(app);
 
     QQmlApplicationEngine engine;
-
     engine.rootContext()->setContextProperty("TIMEIT_FRONTEND_URL", TIMEIT_FRONTEND_URL);
     engine.rootContext()->setContextProperty("TIMEIT_BACKEND_URL", TIMEIT_BACKEND_URL);
-
-    Backend backend(app);
     engine.rootContext()->setContextProperty("backend", &backend);
+
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
@@ -27,9 +26,6 @@ int main(int argc, char *argv[])
         QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
     engine.load(url);
-
-    qDebug() << "frontend url: " TIMEIT_FRONTEND_URL;
-    qDebug() << "backend url: " TIMEIT_BACKEND_URL;
 
     return app.exec();
 }

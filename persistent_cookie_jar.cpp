@@ -36,8 +36,6 @@ void PersistentCookieJar::save()
     }
     QSettings settings;
     settings.setValue("Cookies", data);
-
-    qDebug() << "Saved PersistentCookieJar contents to" << settings.fileName();
 }
 
 void PersistentCookieJar::load()
@@ -46,6 +44,4 @@ void PersistentCookieJar::load()
     QSettings settings;
     QByteArray data = settings.value("Cookies").toByteArray();
     setAllCookies(QNetworkCookie::parseCookies(data));
-
-    qDebug() << "Loaded PersistentCookieJar contents from" << settings.fileName();
 }
