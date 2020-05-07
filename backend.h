@@ -52,6 +52,9 @@ public slots:
     QNetworkReply* createSession(quint32 projectId) const;
     void js_createSession(quint32 projectId, const QJSValue &callback) const;
 
+    QNetworkReply* endSession(quint32 sessionId) const;
+    void js_endSession(quint32 sessionId, const QJSValue &callback) const;
+
     QNetworkReply* sendNote(quint32 sessionId, const QString &noteText) const;
     void js_sendNote(quint32 sessionId, const QString &noteText, const QJSValue &callback) const;
 

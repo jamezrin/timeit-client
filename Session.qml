@@ -10,10 +10,10 @@ Page {
         color: Styles._bgColor
     }
 
+    property real sessionId: -1
+
     Component.onCompleted: {
         mainWindow.resizeTo(this)
-
-        // TODO: create new session and start timer
         timeCounter.start();
     }
 
@@ -75,7 +75,14 @@ Page {
         anchors.leftMargin: 46
 
         onClicked: {
-            stackView.pop()
+            backend.js_endSession(sessionId, function (res, err) {
+                if (!err) {
+                    stackView.pop();
+                } else {
+                    console.log('Unexpected error occurred:', err);
+                }
+            });
+
         }
 
         contentItem: Text {
@@ -187,6 +194,16 @@ Page {
         anchors.leftMargin: 277
         anchors.right: parent.right
         anchors.rightMargin: 28
+
+        onClicked: {
+            backend.js_sendNote(sessionId, noteTextArea.text, function(res, err) {
+                if (!err) {
+                    noteTextArea.clear();
+                } else {
+                    console.log('Unexpected error occurred:', err);
+                }
+            });
+        }
     }
 }
 

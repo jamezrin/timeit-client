@@ -147,6 +147,21 @@ void Backend::js_createSession(quint32 projectId, const QJSValue &callback) cons
     handleReplyCallback(reply, callback);
 }
 
+QNetworkReply* Backend::endSession(quint32 sessionId) const
+{
+    QNetworkRequest request(QUrl(QString(TIMEIT_BACKEND_URL "/sessions/%1/end").arg(sessionId)));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+    QNetworkReply *reply = networkManager->post(request, QByteArray());
+
+    return reply;
+}
+
+void Backend::js_endSession(quint32 sessionId, const QJSValue &callback) const
+{
+    QNetworkReply* reply = endSession(sessionId);
+    handleReplyCallback(reply, callback);
+}
+
 QNetworkReply* Backend::sendNote(quint32 sessionId, const QString &noteText) const
 {
     QUrlQuery formData;

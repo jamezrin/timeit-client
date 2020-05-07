@@ -139,8 +139,8 @@ Page {
                 if (!err) {
                     const session = JSON.parse(res);
                     stackView.push("Session.qml", {
-                       sessionId: session.id
-                   });
+                        sessionId: session.id
+                    });
                 } else {
                     console.log('Unexpected error occurred:', err)
                 }
