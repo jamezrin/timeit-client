@@ -63,6 +63,9 @@ Page {
                             : Styles._whiteColor
             radius: 5
         }
+
+        Keys.enabled: true
+        Keys.onReturnPressed: executeLoginAction();
     }
 
     TextField {
@@ -89,6 +92,30 @@ Page {
                             : Styles._whiteColor
             radius: 5
         }
+
+        Keys.enabled: true
+        Keys.onReturnPressed: executeLoginAction();
+    }
+
+    function executeLoginAction() {
+        backend.js_authenticateUser(emailTextField.text,
+                                    passwordTextField.text,
+                                    function(res, err) {
+            if (err) {
+                if (err === "INVALID_CREDENTIALS") {
+                    warningNoticeText.text = "Tu correo o contraseña son incorrectos";
+                } else if (err === "INACTIVE_ACCOUNT") {
+                    warningNoticeText.text = "Tu cuenta todavía no ha sido confirmada";
+                } else {
+                    warningNoticeText.text = "Error desconocido: " + err;
+                }
+
+                warningNoticeText.visible = true;
+            } else {
+                warningNoticeText.visible = false;
+                stackView.push("ProjectList.qml");
+            }
+        });
     }
 
     Button {
@@ -143,24 +170,7 @@ Page {
         }
 
         onClicked: {
-            backend.js_authenticateUser(emailTextField.text,
-                                        passwordTextField.text,
-                                        function(res, err) {
-                if (err) {
-                    if (err === "INVALID_CREDENTIALS") {
-                        warningNoticeText.text = "Tu correo o contraseña son incorrectos";
-                    } else if (err === "INACTIVE_ACCOUNT") {
-                        warningNoticeText.text = "Tu cuenta todavía no ha sido confirmada";
-                    } else {
-                        warningNoticeText.text = "Error desconocido: " + err;
-                    }
-
-                    warningNoticeText.visible = true;
-                } else {
-                    warningNoticeText.visible = false;
-                    stackView.push("ProjectList.qml");
-                }
-            });
+            executeLoginAction();
         }
 
         anchors.bottom: parent.bottom
@@ -220,7 +230,7 @@ Page {
         anchors.left: parent.left
         anchors.leftMargin: 26
         fillMode: Image.PreserveAspectFit
-        source: "assets/logo/default-monochrome.svg"
+        source: "assets/logo/vector/default-monochrome.svg"
     }
 
     Label {

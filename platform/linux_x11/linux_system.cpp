@@ -38,11 +38,16 @@ const unsigned char* LinuxSystem::getStringProperty(const char *propertyName)
                                 &actual_type, &actual_format, &nitems, &bytes_after, &prop);
 
     if (status == BadWindow) {
-        qDebug() << "Could not find valid window " << window;
+        qDebug() << "XGetWindowProperty returned status BadWindow for " << window;
     }
 
-    if (status != Success) {
-        qDebug() << "XGetWindowProperty failed";
+    if (status == BadValue) {
+        qDebug() << "XGetWindowProperty returned status BadValue";
+    }
+
+    if (status == BadAtom) {
+        qDebug() << "XGetWindowProperty returned status BadAtom";
+        qDebug() << "atom: " << actual_type << " " << filter_atom;
     }
 
     return prop;
