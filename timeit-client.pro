@@ -30,13 +30,13 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 CONFIG(debug, debug|release) {
-    DEFINES += TIMEIT_BACKEND_URL=\\\"http://192.168.0.4:7001/api\\\"
-    DEFINES += TIMEIT_FRONTEND_URL=\\\"http://192.168.0.4:3000\\\"
+    DEFINES += TIMEIT_BACKEND_URL=\\\"http://127.0.0.1:7001\\\"
+    DEFINES += TIMEIT_FRONTEND_URL=\\\"http://127.0.0.1:3000\\\"
 }
 
 CONFIG(release, debug|release) {
-    DEFINES += TIMEIT_BACKEND_URL=\\\"https://example.org/api\\\"
-    DEFINES += TIMEIT_FRONTEND_URL=\\\"https://example.org\\\"
+    DEFINES += TIMEIT_BACKEND_URL=\\\"https://timeit.jamezrin.name/api\\\"
+    DEFINES += TIMEIT_FRONTEND_URL=\\\"https://timeit.jamezrin.name\\\"
 }
 
 HEADERS += \
