@@ -55,7 +55,7 @@ SOURCES += \
 
 win32 {
     CONFIG += windows
-    LIBS += -lpsapi
+    LIBS += -lpsapi -luser32
 }
 
 unix {
