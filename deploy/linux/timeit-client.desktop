@@ -1,0 +1,9 @@
+[Desktop Entry]
+Exec=timeit-client
+Icon=timeit-client
+Terminal=false
+Type=Application
+Name=TimeIt Client
+Comment=TimeIt is a sample time tracking application. This app allows the app activity to be recorded in the platform.
+Categories=Office;Utility;Development;ProjectManagement
+Keywords=time;timeit;work;track
