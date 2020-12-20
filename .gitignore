@@ -125,5 +125,7 @@ compile_commands.json
 # QtCreator local machine specific files for imported projects
 *creator.user*
 
-# Built binary in linux
+# Built stuff
 timeit-client
+*.AppImage
+build/

@@ -1,6 +1,6 @@
 # based on https://github.com/jurplel/install-qt-action/blob/master/.github/workflows/test.yml
 
-name: CI
+name: Build and Deploy
 
 on:
   push:
@@ -9,32 +9,24 @@ on:
     branches: [master]
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [windows-latest, ubuntu-latest]
-        version: ['5.15.1']
+  windows-build:
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
-
       - name: Cache Qt
         id: cache-qt
         uses: actions/cache@v2
         with:
           path: ../Qt
-          key: ${{ runner.os }}-QtCache
-
+          key: windows-QtCache
       - name: Install Qt with options
         uses: jurplel/install-qt-action@v2
         with:
           modules: 'qtwebengine'
-          version: ${{ matrix.version }}
+          version: 5.15.1
           tools: 'tools_ifw,4.0,qt.tools.ifw.40'
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
-
-      - name: Configure project on windows
-        if: startsWith(matrix.os, 'windows')
+      - name: Configure
         run: |
           call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
           dir %Qt5_DIR%/lib/cmake
@@ -43,9 +35,24 @@ jobs:
           qmake "CONFIG+=release"
           jom
         shell: cmd
-
-      - name: Configure project on non-Windows OS
-        if: (!startsWith(matrix.os, 'windows'))
+  ubuntu-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache Qt
+        id: cache-qt
+        uses: actions/cache@v2
+        with:
+          path: ../Qt
+          key: ubuntu-QtCache
+      - name: Install Qt with options
+        uses: jurplel/install-qt-action@v2
+        with:
+          modules: 'qtwebengine'
+          version: 5.15.1
+          tools: 'tools_ifw,4.0,qt.tools.ifw.40'
+          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+      - name: Configure
         run: |
           ls $Qt5_DIR/lib/cmake
           qmake CONFIG+=release
