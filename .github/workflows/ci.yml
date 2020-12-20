@@ -24,17 +24,34 @@ jobs:
         with:
           modules: 'qtwebengine'
           version: 5.15.1
-          tools: 'tools_ifw,4.0,qt.tools.ifw.40'
+          tools: 'tools_ifw,4.0,qt.tools.ifw.40,tools_openssl'
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
-      - name: Make project
+      - name: Install necessary Chocolatey packages
         run: |
-          call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          dir %Qt5_DIR%/lib/cmake
-          choco install jom -y
-          choco install openssl -y
+          choco install jom -y --no-progress
+          choco install openssl -y --no-progress
+        shell: cmd
+      - name: Build Installer
+        run: |
+          refreshenv
+          call "%programfiles(x86)%\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Auxiliary\\Build\\vcvars64.bat"
           qmake "CONFIG+=release"
           jom
+          set PATH=%PATH%;%RUNNER_WORKSPACE%\\Qt\\Tools\\QtInstallerFramework\\4.0\\bin
+          set TIB_RELEASE_BUILD=%cd%\\release\\timeit-client.exe
+          set TIB_PKGS=%cd%\\deploy\\windows
+          set TIB_PKG_DATA=%TIB_PKGS%\\packages\\name.jamezrin.timeit-client\\data
+          set TIB_FINAL_PKG=TimeIt_Setup.exe
+          copy "%TIB_RELEASE_BUILD%" "%TIB_PKG_DATA%"
+          dir %TIB_PKG_DATA%
+          windeployqt --release --qmldir "%cd%" "%TIB_PKG_DATA%\\timeit-client.exe"
+          binarycreator -c "%TIB_PKGS%\\config\config.xml" -p "%TIB_PKGS%\\packages" %TIB_FINAL_PKG%
         shell: cmd
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Windows Build (installer)
+          path: TimeIt_Setup.exe
   ubuntu-build:
     runs-on: ubuntu-latest
     steps:
@@ -58,7 +75,6 @@ jobs:
         shell: bash
       - name: Make project
         run: |
-          ls $Qt5_DIR/lib/cmake
           qmake CONFIG+=release
           make
         shell: bash
