@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package>
     <DisplayName>TimeIt Client</DisplayName>
-    <Description>Install this example.</Description>
+    <Description>TimeIt is a sample time tracking application. This app allows the app activity to be recorded in the platform.</Description>
     <Version>0.1.0-1</Version>
-    <ReleaseDate>2010-11-24</ReleaseDate>
+    <ReleaseDate>2020-12-20</ReleaseDate>
     <Licenses>
         <License name="GPLv3 - GNU General Public License" file="license.txt" />
     </Licenses>
-    <Default>script</Default>
-    <Script>installscript.qs</Script>
-    <UserInterfaces>
-        <UserInterface>page.ui</UserInterface>
-    </UserInterfaces>
+    <Default>true</Default>
 </Package>
