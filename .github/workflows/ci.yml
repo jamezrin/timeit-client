@@ -26,7 +26,7 @@ jobs:
           version: 5.15.1
           tools: 'tools_ifw,4.0,qt.tools.ifw.40'
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
-      - name: Configure
+      - name: Make project
         run: |
           call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
           dir %Qt5_DIR%/lib/cmake
@@ -52,9 +52,37 @@ jobs:
           version: 5.15.1
           tools: 'tools_ifw,4.0,qt.tools.ifw.40'
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
-      - name: Configure
+      - name: Install necessary APT packages
+        run: |
+          sudo apt install -y libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0
+        shell: bash
+      - name: Make project
         run: |
           ls $Qt5_DIR/lib/cmake
           qmake CONFIG+=release
           make
         shell: bash
+      - name: Prepare linuxdeploy
+        run: |
+          wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage -O linuxdeploy-x86_64.AppImage -nv
+          wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage -O linuxdeploy-plugin-qt-x86_64.AppImage -nv
+          chmod +x linuxdeploy-x86_64.AppImage linuxdeploy-plugin-qt-x86_64.AppImage
+          ./linuxdeploy-x86_64.AppImage --list-plugins
+        shell: bash
+      - name: Build AppImage
+        run: |
+          export QML_SOURCES_PATHS=$PWD
+          ./linuxdeploy-x86_64.AppImage \
+            --plugin qt \
+            --appdir build \
+            --executable timeit-client \
+            --desktop-file deploy/linux/timeit-client.desktop \
+            --icon-file deploy/linux/icons/256/timeit-client.png \
+            --icon-file deploy/linux/icons/128/timeit-client.png \
+            --icon-file deploy/linux/icons/64/timeit-client.png \
+            --output appimage
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Linux Build
+          path: TimeIt*.AppImage
