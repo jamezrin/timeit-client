@@ -17,14 +17,6 @@ ISystem* getSystemApi()
 #endif
 }
 
-void setupProxy(QNetworkAccessManager *networkManager) {
-    QNetworkProxy proxy;
-    proxy.setType(QNetworkProxy::HttpProxy);
-    proxy.setHostName("localhost");
-    proxy.setPort(8000);
-    networkManager->setProxy(proxy);
-}
-
 Backend::Backend(QObject &parent)
 {
     systemApi = getSystemApi();

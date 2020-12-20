@@ -18,7 +18,7 @@ LinuxSystem::LinuxSystem()
                 << XDisplayName(display_name);
     }
 
-    qInfo() << "Sistema inicializado para Linux";
+    qInfo() << "Loaded for Linux environment";
 }
 
 LinuxSystem::~LinuxSystem()

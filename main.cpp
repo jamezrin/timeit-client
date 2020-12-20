@@ -29,6 +29,10 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
     engine.load(url);
 
+    qDebug() << "SSL Supported:" << QSslSocket::supportsSsl();
+    qDebug() << "SSL Library Build Version:" << QSslSocket::sslLibraryBuildVersionString();
+    qDebug() << "SSL Library Current Version:" << QSslSocket::sslLibraryVersionString();
+
     return app.exec();
 }
 

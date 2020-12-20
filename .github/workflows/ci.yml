@@ -10,55 +10,92 @@ on:
 
 jobs:
   windows-build:
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-2019]
     steps:
       - uses: actions/checkout@v2
       - name: Cache Qt
         id: cache-qt
-        uses: actions/cache@v2
+        uses: actions/cache@v1
         with:
           path: ../Qt
-          key: windows-QtCache
+          key: ${{ matrix.os }}-QtCache
       - name: Install Qt with options
         uses: jurplel/install-qt-action@v2
         with:
-          modules: 'qtwebengine'
           version: 5.15.1
-          tools: 'tools_ifw,4.0,qt.tools.ifw.40'
+          tools: 'tools_ifw,4.0,qt.tools.ifw.40 tools_openssl_x64,1.1.1-4,qt.tools.openssl.win_x64'
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
-      - name: Make project
+      - name: Install necessary Chocolatey packages
         run: |
-          call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          dir %Qt5_DIR%/lib/cmake
-          choco install jom -y
-          choco install openssl -y
+          choco install jom -y --no-progress
+          choco install openssl -y --no-progress
+        shell: cmd
+      - uses: actions/cache@v2
+        with:
+          path: C:\Users\runneradmin\AppData\Local\Temp\chocolatey
+          key: ${{ runner.os }}-chocolatey-${{ matrix.os }}-${{ hashFiles('**/lockfiles') }}
+          restore-keys: |
+            ${{ runner.os }}-chocolatey-${{ matrix.os }}-
+            ${{ runner.os }}-chocolatey-
+      - name: Make project and build installer
+        run: |
+          echo "Building project..."
+          call "%programfiles(x86)%\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Auxiliary\\Build\\vcvars64.bat"
           qmake "CONFIG+=release"
           jom
+
+          echo "Deploying binary dependencies..."
+          set TIB_RELEASE_BUILD=%cd%\release\timeit-client.exe
+          set TIB_DEPLOY_DIR=%cd%\deploy\windows
+          set TIB_PKG_DATA_DIR=%TIB_DEPLOY_DIR%\packages\name.jamezrin.timeit_client\data
+          set TIB_INSTALLER_FILE=TimeIt_setup.exe
+          copy "%TIB_RELEASE_BUILD%" "%TIB_PKG_DATA_DIR%"
+          windeployqt --release --qmldir . "%TIB_PKG_DATA_DIR%\timeit-client.exe"
+
+          echo "Adding OpenSSL DLLs..."
+          set OPENSSL_BIN_DIR=%ProgramFiles%\OpenSSL-Win64\bin
+          copy "%OPENSSL_BIN_DIR%\libcrypto-1_1-x64.dll" "%TIB_PKG_DATA_DIR%"
+          copy "%OPENSSL_BIN_DIR%\libssl-1_1-x64.dll" "%TIB_PKG_DATA_DIR%"
+
+          echo "Building installer..."
+          dir "%TIB_PKG_DATA_DIR%"
+          set PATH=%PATH%;%RUNNER_WORKSPACE%\Qt\Tools\QtInstallerFramework\4.0\bin
+          binarycreator -c "%TIB_DEPLOY_DIR%\config\config.xml" -p "%TIB_DEPLOY_DIR%\packages" %TIB_INSTALLER_FILE%
         shell: cmd
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Windows (Installer)
+          path: TimeIt_setup.exe
   ubuntu-build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-18.04]
     steps:
       - uses: actions/checkout@v2
       - name: Cache Qt
         id: cache-qt
-        uses: actions/cache@v2
+        uses: actions/cache@v1
         with:
           path: ../Qt
-          key: ubuntu-QtCache
+          key: ${{ matrix.os }}-QtCache
       - name: Install Qt with options
         uses: jurplel/install-qt-action@v2
         with:
-          modules: 'qtwebengine'
           version: 5.15.1
           tools: 'tools_ifw,4.0,qt.tools.ifw.40'
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
       - name: Install necessary APT packages
         run: |
+          ls -la ..
           sudo apt install -y libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0
         shell: bash
       - name: Make project
         run: |
-          ls $Qt5_DIR/lib/cmake
           qmake CONFIG+=release
           make
         shell: bash
@@ -84,5 +121,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: Linux Build
+          name: Linux (AppImage format)
           path: TimeIt*.AppImage

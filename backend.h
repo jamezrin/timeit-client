@@ -16,7 +16,6 @@
 #include <QNetworkCookie>
 #include <QNetworkCookieJar>
 #include <QNetworkAccessManager>
-#include <QNetworkConfiguration>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJSEngine>
