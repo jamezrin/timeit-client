@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Cache Qt
         id: cache-qt
-        uses: actions/cache@v2
+        uses: actions/cache@v1
         with:
           path: ../Qt
           key: windows-QtCache
@@ -33,10 +33,10 @@ jobs:
         shell: cmd
       - name: Build Installer
         run: |
-          call refreshenv
           call "%programfiles(x86)%\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Auxiliary\\Build\\vcvars64.bat"
           qmake "CONFIG+=release"
           jom
+          windeployqt --release --qmldir 
           set PATH=%PATH%;%RUNNER_WORKSPACE%\\Qt\\Tools\\QtInstallerFramework\\4.0\\bin
           set TIB_RELEASE_BUILD=%cd%\\release\\timeit-client.exe
           set TIB_PKGS=%cd%\\deploy\\windows
@@ -58,7 +58,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Cache Qt
         id: cache-qt
-        uses: actions/cache@v2
+        uses: actions/cache@v1
         with:
           path: ../Qt
           key: ubuntu-QtCache
