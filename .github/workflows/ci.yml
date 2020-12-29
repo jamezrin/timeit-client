@@ -37,13 +37,14 @@ jobs:
           qmake "CONFIG+=release"
           jom
           set PATH=%PATH%;%RUNNER_WORKSPACE%\\Qt\\Tools\\QtInstallerFramework\\4.0\\bin
-          set PATH=%PATH%;C:\Program Files\\OpenSSL-Win64\\bin
+          set PATH=%PATH%;%ProgramFiles%\\OpenSSL-Win64\\bin
           set TIB_RELEASE_BUILD=%cd%\\release\\timeit-client.exe
           set TIB_PKGS=%cd%\\deploy\\windows
           set TIB_PKG_DATA=%TIB_PKGS%\\packages\\name.jamezrin.timeit-client\\data
           set TIB_FINAL_PKG=TimeIt_Setup.exe
           copy "%TIB_RELEASE_BUILD%" "%TIB_PKG_DATA%"
           windeployqt --release --qmldir "%cd%" "%TIB_PKG_DATA%\\timeit-client.exe"
+          dir "%TIB_PKG_DATA%"
           binarycreator -c "%TIB_PKGS%\\config\config.xml" -p "%TIB_PKGS%\\packages" %TIB_FINAL_PKG%
         shell: cmd
       - name: Upload artifact
