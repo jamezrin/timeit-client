@@ -25,7 +25,6 @@ jobs:
           version: 5.15.1
           tools: 'tools_ifw,4.0,qt.tools.ifw.40 tools_openssl,1.1.1,qt.tools.openssl'
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
-          arch: win64_mingw81
       - name: Install necessary Chocolatey packages
         run: |
           choco install jom -y --no-progress
