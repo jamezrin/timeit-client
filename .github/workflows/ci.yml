@@ -22,7 +22,7 @@ jobs:
       - name: Install Qt with options
         uses: jurplel/install-qt-action@v2
         with:
-          version: 5.15.1
+          version: 5.15.2
           tools: 'tools_ifw,4.0,qt.tools.ifw.40 tools_openssl,1.1.1,qt.tools.openssl'
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
           arch: win64_mingw81
@@ -36,16 +36,16 @@ jobs:
           call "%programfiles(x86)%\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Auxiliary\\Build\\vcvars64.bat"
           qmake "CONFIG+=release"
           jom
-          set PATH=%PATH%;%RUNNER_WORKSPACE%\\Qt\\Tools\\QtInstallerFramework\\4.0\\bin
-          set PATH=%PATH%;%ProgramFiles%\\OpenSSL-Win64\\bin
-          set TIB_RELEASE_BUILD=%cd%\\release\\timeit-client.exe
-          set TIB_PKGS=%cd%\\deploy\\windows
-          set TIB_PKG_DATA=%TIB_PKGS%\\packages\\name.jamezrin.timeit-client\\data
+          set TIB_RELEASE_BUILD=%cd%\release\timeit-client.exe
+          set TIB_PKGS=%cd%\deploy\windows
+          set TIB_PKG_DATA=%TIB_PKGS%\packages\name.jamezrin.timeit-client\data
           set TIB_FINAL_PKG=TimeIt_Setup.exe
           copy "%TIB_RELEASE_BUILD%" "%TIB_PKG_DATA%"
-          windeployqt --release --qmldir "%cd%" "%TIB_PKG_DATA%\\timeit-client.exe"
-          dir "%TIB_PKG_DATA%"
-          binarycreator -c "%TIB_PKGS%\\config\config.xml" -p "%TIB_PKGS%\\packages" %TIB_FINAL_PKG%
+          windeployqt --release --qmldir . "%TIB_PKG_DATA%\timeit-client.exe"
+          copy "%ProgramFiles%\OpenSSL-Win64\bin\libcrypto-1_1-x64.dll" "%TIB_PKG_DATA%"
+          copy "%ProgramFiles%\OpenSSL-Win64\bin\libssl-1_1-x64.dll" "%TIB_PKG_DATA%"
+          set PATH=%PATH%;%RUNNER_WORKSPACE%\Qt\Tools\QtInstallerFramework\4.0\bin
+          binarycreator -c "%TIB_PKGS%\config\config.xml" -p "%TIB_PKGS%\packages" %TIB_FINAL_PKG%
         shell: cmd
       - name: Upload artifact
         uses: actions/upload-artifact@v2
@@ -65,8 +65,8 @@ jobs:
       - name: Install Qt with options
         uses: jurplel/install-qt-action@v2
         with:
-          version: 5.15.1
-          tools: 'tools_ifw,4.0,qt.tools.ifw.40 tools_openssl'
+          version: 5.15.2
+          tools: 'tools_ifw,4.0,qt.tools.ifw.40'
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
       - name: Install necessary APT packages
         run: |
