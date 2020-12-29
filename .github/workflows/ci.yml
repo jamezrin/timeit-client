@@ -22,9 +22,8 @@ jobs:
       - name: Install Qt with options
         uses: jurplel/install-qt-action@v2
         with:
-          modules: 'qtwebengine'
           version: 5.15.1
-          tools: 'tools_ifw,4.0,qt.tools.ifw.40,tools_openssl'
+          tools: 'tools_ifw,4.0,qt.tools.ifw.40 tools_openssl,1.1.1,qt.tools.openssl'
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
       - name: Install necessary Chocolatey packages
         run: |
@@ -65,9 +64,8 @@ jobs:
       - name: Install Qt with options
         uses: jurplel/install-qt-action@v2
         with:
-          modules: 'qtwebengine'
           version: 5.15.1
-          tools: 'tools_ifw,4.0,qt.tools.ifw.40'
+          tools: 'tools_ifw,4.0,qt.tools.ifw.40 tools_openssl'
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
       - name: Install necessary APT packages
         run: |
