@@ -31,7 +31,7 @@ jobs:
           choco install jom -y --no-progress
           choco install openssl -y --no-progress
         shell: cmd
-      - name: Build Installer
+      - name: Make project and build installer
         run: |
           call "%programfiles(x86)%\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Auxiliary\\Build\\vcvars64.bat"
           qmake "CONFIG+=release"
