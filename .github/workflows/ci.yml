@@ -37,15 +37,16 @@ jobs:
           qmake "CONFIG+=release"
           jom
           set TIB_RELEASE_BUILD=%cd%\release\timeit-client.exe
-          set TIB_PKGS=%cd%\deploy\windows
-          set TIB_PKG_DATA=%TIB_PKGS%\packages\name.jamezrin.timeit-client\data
-          set TIB_FINAL_PKG=TimeIt_Setup.exe
-          copy "%TIB_RELEASE_BUILD%" "%TIB_PKG_DATA%"
-          windeployqt --release --qmldir . "%TIB_PKG_DATA%\timeit-client.exe"
-          copy "%ProgramFiles%\OpenSSL-Win64\bin\libcrypto-1_1-x64.dll" "%TIB_PKG_DATA%"
-          copy "%ProgramFiles%\OpenSSL-Win64\bin\libssl-1_1-x64.dll" "%TIB_PKG_DATA%"
+          set TIB_DEPLOY_DIR=%cd%\deploy\windows
+          set TIB_PKG_DATA_DIR=%TIB_DEPLOY_DIR%\packages\name.jamezrin.timeit-client\data
+          set TIB_INSTALLER_FILE=TimeIt_setup.exe
+          copy "%TIB_RELEASE_BUILD%" "%TIB_PKG_DATA_DIR%"
+          windeployqt --release --qmldir . "%TIB_PKG_DATA_DIR%\timeit-client.exe"
+          set OPENSSL_BIN_DIR=%ProgramFiles%\OpenSSL-Win64\bin
+          copy "%OPENSSL_BIN_DIR%\libcrypto-1_1-x64.dll" "%TIB_PKG_DATA_DIR%"
+          copy "%OPENSSL_BIN_DIR%\libssl-1_1-x64.dll" "%TIB_PKG_DATA_DIR%"
           set PATH=%PATH%;%RUNNER_WORKSPACE%\Qt\Tools\QtInstallerFramework\4.0\bin
-          binarycreator -c "%TIB_PKGS%\config\config.xml" -p "%TIB_PKGS%\packages" %TIB_FINAL_PKG%
+          binarycreator -c "%TIB_DEPLOY_DIR%\config\config.xml" -p "%TIB_DEPLOY_DIR%\packages" %TIB_INSTALLER_FILE%
         shell: cmd
       - name: Upload artifact
         uses: actions/upload-artifact@v2
