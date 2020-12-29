@@ -33,18 +33,25 @@ jobs:
         shell: cmd
       - name: Make project and build installer
         run: |
+          echo "Building project..."
           call "%programfiles(x86)%\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Auxiliary\\Build\\vcvars64.bat"
           qmake "CONFIG+=release"
           jom
+
+          echo "Deploying binary dependencies..."
           set TIB_RELEASE_BUILD=%cd%\release\timeit-client.exe
           set TIB_DEPLOY_DIR=%cd%\deploy\windows
           set TIB_PKG_DATA_DIR=%TIB_DEPLOY_DIR%\packages\name.jamezrin.timeit-client\data
           set TIB_INSTALLER_FILE=TimeIt_setup.exe
           copy "%TIB_RELEASE_BUILD%" "%TIB_PKG_DATA_DIR%"
           windeployqt --release --qmldir . "%TIB_PKG_DATA_DIR%\timeit-client.exe"
+
+          echo "Adding OpenSSL DLLs..."
           set OPENSSL_BIN_DIR=%ProgramFiles%\OpenSSL-Win64\bin
           copy "%OPENSSL_BIN_DIR%\libcrypto-1_1-x64.dll" "%TIB_PKG_DATA_DIR%"
           copy "%OPENSSL_BIN_DIR%\libssl-1_1-x64.dll" "%TIB_PKG_DATA_DIR%"
+
+          echo "Building installer..."
           dir "%TIB_PKG_DATA_DIR%"
           set PATH=%PATH%;%RUNNER_WORKSPACE%\Qt\Tools\QtInstallerFramework\4.0\bin
           binarycreator -c "%TIB_DEPLOY_DIR%\config\config.xml" -p "%TIB_DEPLOY_DIR%\packages" %TIB_INSTALLER_FILE%
@@ -53,7 +60,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Windows Build (installer)
-          path: TimeIt_Setup.exe
+          path: TimeIt_setup.exe
   ubuntu-build:
     runs-on: ubuntu-latest
     steps:
