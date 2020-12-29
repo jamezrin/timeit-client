@@ -45,6 +45,7 @@ jobs:
           set OPENSSL_BIN_DIR=%ProgramFiles%\OpenSSL-Win64\bin
           copy "%OPENSSL_BIN_DIR%\libcrypto-1_1-x64.dll" "%TIB_PKG_DATA_DIR%"
           copy "%OPENSSL_BIN_DIR%\libssl-1_1-x64.dll" "%TIB_PKG_DATA_DIR%"
+          dir "%TIB_PKG_DATA_DIR%"
           set PATH=%PATH%;%RUNNER_WORKSPACE%\Qt\Tools\QtInstallerFramework\4.0\bin
           binarycreator -c "%TIB_DEPLOY_DIR%\config\config.xml" -p "%TIB_DEPLOY_DIR%\packages" %TIB_INSTALLER_FILE%
         shell: cmd
