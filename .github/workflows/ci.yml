@@ -52,7 +52,7 @@ jobs:
 
           windeployqt --release --qmldir "%cd%" "%TIB_PKG_DATA%\\timeit-client.exe"
           dir %TIB_PKG_DATA%
-          dir %TIB_FINAL_PKG%
+          
           binarycreator -c "%TIB_PKGS%\\config\config.xml" -p "%TIB_PKGS%\\packages" %TIB_FINAL_PKG%
         shell: cmd
       - name: Upload artifact
