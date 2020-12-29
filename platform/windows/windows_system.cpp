@@ -6,7 +6,7 @@
 
 WindowsSystem::WindowsSystem()
 {
-    qInfo() << "Sistema inicializado para Windows";
+    qInfo() << "Loaded for Windows environment";
 }
 
 WindowsSystem::~WindowsSystem() {
@@ -17,6 +17,7 @@ WindowsSystem::~WindowsSystem() {
 WindowsSystem::WindowProps WindowsSystem::getCurrentFocusedWindow()
 {
     HWND hwnd = GetForegroundWindow();
+    if (!hwnd) return WindowProps{};
 
     wchar_t windowName[200];
     GetWindowTextW(hwnd, windowName, 200);
@@ -29,6 +30,8 @@ WindowsSystem::WindowProps WindowsSystem::getCurrentFocusedWindow()
                 false,
                 windowPid
     );
+
+    if (!handle) return WindowProps{};
 
     wchar_t windowProcess[200];
     GetModuleFileNameEx(handle, NULL, windowProcess, 200);

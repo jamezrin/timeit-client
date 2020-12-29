@@ -1,4 +1,4 @@
-QT += quick widgets
+QT += quick widgets network
 
 CONFIG += c++11
 
@@ -55,7 +55,7 @@ SOURCES += \
 
 win32 {
     CONFIG += windows
-    LIBS += -lpsapi -luser32 -lssl -lcrypto -lopenssl
+    LIBS += -lpsapi -luser32
 }
 
 unix {
