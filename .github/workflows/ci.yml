@@ -26,7 +26,7 @@ jobs:
         uses: jurplel/install-qt-action@v2
         with:
           version: 5.15.1
-          tools: 'tools_ifw,4.0,qt.tools.ifw.40 tools_openssl_x64'
+          tools: 'tools_ifw,4.0,qt.tools.ifw.40 tools_openssl_x64,1.1.1-4,qt.tools.openssl.win_x64'
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
       - name: Install necessary Chocolatey packages
         run: |
@@ -74,9 +74,15 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-18.04]
     steps:
       - uses: actions/checkout@v2
+      - name: Cache Qt
+        id: cache-qt
+        uses: actions/cache@v1
+        with:
+          path: ../Qt
+          key: ${{ matrix.os }}-QtCache
       - name: Install Qt with options
         uses: jurplel/install-qt-action@v2
         with:
