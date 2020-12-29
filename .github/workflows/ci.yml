@@ -10,7 +10,10 @@ on:
 
 jobs:
   windows-build:
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-2019]
     steps:
       - uses: actions/checkout@v2
       - name: Cache Qt
@@ -18,7 +21,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ../Qt
-          key: windows-QtCache
+          key: ${{ matrix.os }}-QtCache
       - name: Install Qt with options
         uses: jurplel/install-qt-action@v2
         with:
@@ -30,6 +33,13 @@ jobs:
           choco install jom -y --no-progress
           choco install openssl -y --no-progress
         shell: cmd
+      - uses: actions/cache@v2
+        with:
+          path: C:\Users\runneradmin\AppData\Local\Temp\chocolatey
+          key: ${{ runner.os }}-chocolatey-${{ matrix.os }}-${{ hashFiles('**/lockfiles') }}
+          restore-keys: |
+            ${{ runner.os }}-chocolatey-${{ matrix.os }}-
+            ${{ runner.os }}-chocolatey-
       - name: Make project and build installer
         run: |
           echo "Building project..."
@@ -61,15 +71,12 @@ jobs:
           name: Windows Build (installer)
           path: TimeIt_setup.exe
   ubuntu-build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v2
-      - name: Cache Qt
-        id: cache-qt
-        uses: actions/cache@v1
-        with:
-          path: ../Qt
-          key: ubuntu-QtCache
       - name: Install Qt with options
         uses: jurplel/install-qt-action@v2
         with:
@@ -78,6 +85,7 @@ jobs:
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
       - name: Install necessary APT packages
         run: |
+          ls -la ..
           sudo apt install -y libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0
         shell: bash
       - name: Make project
