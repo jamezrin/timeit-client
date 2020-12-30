@@ -50,7 +50,7 @@ jobs:
           echo "Deploying binary dependencies..."
           set TIB_RELEASE_BUILD=%cd%\release\timeit-client.exe
           set TIB_DEPLOY_DIR=%cd%\deploy\windows
-          set TIB_PKG_DATA_DIR=%TIB_DEPLOY_DIR%\packages\name.jamezrin.timeit-client\data
+          set TIB_PKG_DATA_DIR=%TIB_DEPLOY_DIR%\packages\name.jamezrin.timeit_client\data
           set TIB_INSTALLER_FILE=TimeIt_setup.exe
           copy "%TIB_RELEASE_BUILD%" "%TIB_PKG_DATA_DIR%"
           windeployqt --release --qmldir . "%TIB_PKG_DATA_DIR%\timeit-client.exe"

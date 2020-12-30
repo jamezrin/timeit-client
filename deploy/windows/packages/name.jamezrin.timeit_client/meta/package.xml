@@ -8,5 +8,6 @@
         <License name="GPLv3 - GNU General Public License" file="license.txt" />
     </Licenses>
     <Default>true</Default>
+    <Name>timeit_client</Name>
     <Script>installscript.qs</Script>
 </Package>
