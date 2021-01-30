@@ -1,10 +1,12 @@
 function Component() {
-  
+
 }
 
 Component.prototype.createOperations = function () {
   // Call original hooked function
   component.createOperations();
+
+  component.addElevatedOperation("Mkdir", "@TargetDir@");
 
   if (installer.value('os') === 'win') {
     // Add shortcut to start menu
