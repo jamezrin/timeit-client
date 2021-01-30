@@ -10,4 +10,5 @@
     <Default>true</Default>
     <Name>timeit_client</Name>
     <Script>installscript.qs</Script>
+    <RequiresAdminRights>true</RequiresAdminRights>
 </Package>
