@@ -9,6 +9,4 @@
     </Licenses>
     <Name>timeit_client</Name>
     <Script>installscript.qs</Script>
-    <RequiresAdminRights>true</RequiresAdminRights>
-    <RemoveTargetDir>true</RemoveTargetDir>
 </Package>

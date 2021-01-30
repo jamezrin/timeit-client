@@ -1,7 +1,3 @@
-function Component() {
-  installer.gainAdminRights();
-}
-
 Component.prototype.createOperations = function () {
   // Call original hooked function
   component.createOperations();
