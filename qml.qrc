@@ -13,5 +13,6 @@
         <file>assets/icons/logout.svg</file>
         <file>assets/icons/globe-grid.svg</file>
         <file>assets/icons/refresh.svg</file>
+        <file>timeit.ico</file>
     </qresource>
 </RCC>

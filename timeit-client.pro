@@ -56,6 +56,7 @@ SOURCES += \
 win32 {
     CONFIG += windows
     LIBS += -lpsapi -luser32
+    RC_ICONS += timeit.ico
 }
 
 unix {
