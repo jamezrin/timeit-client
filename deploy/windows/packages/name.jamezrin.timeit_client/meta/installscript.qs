@@ -1,3 +1,7 @@
+function Component() {
+  
+}
+
 Component.prototype.createOperations = function () {
   // Call original hooked function
   component.createOperations();

@@ -5,6 +5,6 @@
     <Title>TimeIt Client Installer</Title>
     <Publisher>Jaime Martínez Rincón</Publisher>
     <StartMenuDir>TimeIt</StartMenuDir>
-    <TargetDir>@HomeDir@/TimeIt</TargetDir>
-    <AdminTargetDir>@ApplicationsDir@/TimeIt</AdminTargetDir>
+    <TargetDir>@ApplicationsDir@/TimeIt</TargetDir>
+    <AllowSpaceInPath>true</AllowSpaceInPath>
 </Installer>

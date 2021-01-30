@@ -4,9 +4,11 @@
     <Description>TimeIt is a sample time tracking application. This app allows the app activity to be recorded in the platform.</Description>
     <Version>0.1.0-1</Version>
     <ReleaseDate>2020-12-20</ReleaseDate>
+    <Name>timeit_client</Name>
     <Licenses>
         <License name="GPLv3 - GNU General Public License" file="license.txt" />
     </Licenses>
-    <Name>timeit_client</Name>
+    <Default>true</Default>
     <Script>installscript.qs</Script>
+    <RequiresAdminRights>true</RequiresAdminRights>
 </Package>
