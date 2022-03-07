@@ -66,7 +66,7 @@ jobs:
           binarycreator -c "%TIB_DEPLOY_DIR%\config\config.xml" -p "%TIB_DEPLOY_DIR%\packages" %TIB_INSTALLER_FILE%
         shell: cmd
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Windows (Installer)
           path: TimeIt_setup.exe
@@ -119,7 +119,7 @@ jobs:
             --icon-file deploy/linux/icons/64/timeit-client.png \
             --output appimage
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Linux (AppImage format)
           path: TimeIt*.AppImage
