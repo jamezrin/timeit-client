@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Cache Qt
         id: cache-qt
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         with:
           path: ../Qt
           key: ${{ matrix.os }}-QtCache
@@ -33,7 +33,7 @@ jobs:
           choco install jom -y --no-progress
           choco install openssl -y --no-progress
         shell: cmd
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         with:
           path: C:\Users\runneradmin\AppData\Local\Temp\chocolatey
           key: ${{ runner.os }}-chocolatey-${{ matrix.os }}-${{ hashFiles('**/lockfiles') }}
@@ -79,7 +79,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Cache Qt
         id: cache-qt
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         with:
           path: ../Qt
           key: ${{ matrix.os }}-QtCache
