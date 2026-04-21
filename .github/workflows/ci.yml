@@ -23,7 +23,7 @@ jobs:
           path: ../Qt
           key: ${{ matrix.os }}-QtCache
       - name: Install Qt with options
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v4.3.1
         with:
           version: 5.15.1
           tools: 'tools_ifw,4.0,qt.tools.ifw.40 tools_openssl_x64,1.1.1-4,qt.tools.openssl.win_x64'
@@ -84,7 +84,7 @@ jobs:
           path: ../Qt
           key: ${{ matrix.os }}-QtCache
       - name: Install Qt with options
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v4.3.1
         with:
           version: 5.15.1
           tools: 'tools_ifw,4.0,qt.tools.ifw.40'
